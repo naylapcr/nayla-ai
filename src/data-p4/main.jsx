@@ -1,13 +1,14 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import './index.css'
+// Import CSS global (tempat kamu manggil @tailwind base, dll)
+import './' 
 
-// GANTI: Jangan panggil App, tapi panggil LayananIT dari folder pages
+// Import halaman tugas pertemuan 4 kamu
 import LayananIT from './pages/LayananIT.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    {/* Tampilkan halaman tugas pertemuan 4 kamu */}
+    {/* Langsung tampilkan komponen utama tugas P4 */}
     <LayananIT />
   </StrictMode>,
 )

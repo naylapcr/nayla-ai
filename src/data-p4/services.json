@@ -1,0 +1,222 @@
+[
+  {
+    "id": 1,
+    "title": "Web Development Bootcamp",
+    "category": "Programming",
+    "level": "Beginner",
+    "price": "Rp 750.000",
+    "image": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=500&q=80",
+    "instructor": { "name": "Budi Santoso", "role": "Fullstack Dev", "avatar": "https://i.pravatar.cc/150?u=1" },
+    "details": { "duration": "40 Jam", "modules": 20, "certificate": true },
+    "stats": { "rating": 4.8, "students": 1200, "lastUpdate": "2026-01-15" }
+  },
+  {
+    "id": 2,
+    "title": "UI/UX Design Masterclass",
+    "category": "Design",
+    "level": "Intermediate",
+    "price": "Rp 550.000",
+    "image": "https://images.unsplash.com/photo-1586717791821-3f44a563dc4c?w=500&q=80",
+    "instructor": { "name": "Siti Aminah", "role": "Senior Designer", "avatar": "https://i.pravatar.cc/150?u=2" },
+    "details": { "duration": "25 Jam", "modules": 12, "certificate": true },
+    "stats": { "rating": 4.9, "students": 850, "lastUpdate": "2026-02-10" }
+  },
+  {
+    "id": 3,
+    "title": "Data Science with Python",
+    "category": "Data",
+    "level": "Advanced",
+    "price": "Rp 900.000",
+    "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=500&q=80",
+    "instructor": { "name": "Andi Wijaya", "role": "Data Scientist", "avatar": "https://i.pravatar.cc/150?u=3" },
+    "details": { "duration": "50 Jam", "modules": 25, "certificate": true },
+    "stats": { "rating": 4.7, "students": 2100, "lastUpdate": "2026-03-01" }
+  },
+  {
+    "id": 4,
+    "title": "Mobile App Dev (Flutter)",
+    "category": "Programming",
+    "level": "Intermediate",
+    "price": "Rp 850.000",
+    "image": "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=500&q=80",
+    "instructor": { "name": "Rizky Pratama", "role": "Mobile Engineer", "avatar": "https://i.pravatar.cc/150?u=4" },
+    "details": { "duration": "35 Jam", "modules": 18, "certificate": true },
+    "stats": { "rating": 4.6, "students": 980, "lastUpdate": "2026-03-20" }
+  },
+  {
+    "id": 5,
+    "title": "Cyber Security Essentials",
+    "category": "IT Ops",
+    "level": "Beginner",
+    "price": "Rp 600.000",
+    "image": "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=500&q=80",
+    "instructor": { "name": "Dewi Sartika", "role": "Security Analyst", "avatar": "https://i.pravatar.cc/150?u=5" },
+    "details": { "duration": "20 Jam", "modules": 10, "certificate": true },
+    "stats": { "rating": 4.8, "students": 540, "lastUpdate": "2026-01-25" }
+  },
+  {
+    "id": 6,
+    "title": "Laravel for Backend Dev",
+    "category": "Programming",
+    "level": "Advanced",
+    "price": "Rp 700.000",
+    "image": "https://images.unsplash.com/photo-1537432376769-00f5c2f4c8d2?w=500&q=80",
+    "instructor": { "name": "Fajar Sidik", "role": "Backend Lead", "avatar": "https://i.pravatar.cc/150?u=6" },
+    "details": { "duration": "30 Jam", "modules": 15, "certificate": true },
+    "stats": { "rating": 4.9, "students": 1100, "lastUpdate": "2026-02-15" }
+  },
+  {
+    "id": 7,
+    "title": "Digital Marketing Strategy",
+    "category": "Marketing",
+    "level": "Beginner",
+    "price": "Rp 400.000",
+    "image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500&q=80",
+    "instructor": { "name": "Lusi Putri", "role": "Marketing Expert", "avatar": "https://i.pravatar.cc/150?u=7" },
+    "details": { "duration": "12 Jam", "modules": 6, "certificate": true },
+    "stats": { "rating": 4.5, "students": 3200, "lastUpdate": "2026-03-10" }
+  },
+  {
+    "id": 8,
+    "title": "Project Management (PMP)",
+    "category": "Management",
+    "level": "Intermediate",
+    "price": "Rp 1.200.000",
+    "image": "https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=500&q=80",
+    "instructor": { "name": "Hendra Kurnia", "role": "PMP Certified", "avatar": "https://i.pravatar.cc/150?u=8" },
+    "details": { "duration": "45 Jam", "modules": 22, "certificate": true },
+    "stats": { "rating": 4.9, "students": 450, "lastUpdate": "2026-04-01" }
+  },
+  {
+    "id": 9,
+    "title": "React Native for iOS & Android",
+    "category": "Programming",
+    "level": "Advanced",
+    "price": "Rp 800.000",
+    "image": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=500&q=80",
+    "instructor": { "name": "Anton Jaya", "role": "Senior Engineer", "avatar": "https://i.pravatar.cc/150?u=9" },
+    "details": { "duration": "38 Jam", "modules": 19, "certificate": true },
+    "stats": { "rating": 4.7, "students": 720, "lastUpdate": "2026-03-25" }
+  },
+  {
+    "id": 10,
+    "title": "Graphic Design with Canva",
+    "category": "Design",
+    "level": "Beginner",
+    "price": "Rp 250.000",
+    "image": "https://images.unsplash.com/photo-1626785774573-4b799315345d?w=500&q=80",
+    "instructor": { "name": "Mega Utami", "role": "Content Creator", "avatar": "https://i.pravatar.cc/150?u=10" },
+    "details": { "duration": "10 Jam", "modules": 5, "certificate": true },
+    "stats": { "rating": 4.4, "students": 5100, "lastUpdate": "2026-04-05" }
+  },
+  {
+    "id": 11,
+    "title": "AWS Cloud Computing",
+    "category": "IT Ops",
+    "level": "Intermediate",
+    "price": "Rp 1.500.000",
+    "image": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=500&q=80",
+    "instructor": { "name": "Kevin Sanjaya", "role": "Cloud Architect", "avatar": "https://i.pravatar.cc/150?u=11" },
+    "details": { "duration": "40 Jam", "modules": 20, "certificate": true },
+    "stats": { "rating": 4.9, "students": 320, "lastUpdate": "2026-02-28" }
+  },
+  {
+    "id": 12,
+    "title": "Machine Learning Specialization",
+    "category": "Data",
+    "level": "Advanced",
+    "price": "Rp 2.000.000",
+    "image": "https://images.unsplash.com/photo-1527474305487-b87b222841cc?w=500&q=80",
+    "instructor": { "name": "Prof. Ahmad", "role": "AI Researcher", "avatar": "https://i.pravatar.cc/150?u=12" },
+    "details": { "duration": "60 Jam", "modules": 30, "certificate": true },
+    "stats": { "rating": 5.0, "students": 600, "lastUpdate": "2026-03-15" }
+  },
+  {
+    "id": 13,
+    "title": "Video Editing with Premiere Pro",
+    "category": "Design",
+    "level": "Intermediate",
+    "price": "Rp 650.000",
+    "image": "https://images.unsplash.com/photo-1536240478700-b869070f9279?w=500&q=80",
+    "instructor": { "name": "Eko Prasetyo", "role": "Video Editor", "avatar": "https://i.pravatar.cc/150?u=13" },
+    "details": { "duration": "22 Jam", "modules": 11, "certificate": true },
+    "stats": { "rating": 4.7, "students": 1400, "lastUpdate": "2026-01-30" }
+  },
+  {
+    "id": 14,
+    "title": "SEO & Content Writing",
+    "category": "Marketing",
+    "level": "Beginner",
+    "price": "Rp 300.000",
+    "image": "https://images.unsplash.com/photo-1542435503-956c469947f6?w=500&q=80",
+    "instructor": { "name": "Dinda Kirana", "role": "SEO Specialist", "avatar": "https://i.pravatar.cc/150?u=14" },
+    "details": { "duration": "15 Jam", "modules": 8, "certificate": true },
+    "stats": { "rating": 4.6, "students": 2500, "lastUpdate": "2026-02-20" }
+  },
+  {
+    "id": 15,
+    "title": "Java Spring Boot Microservices",
+    "category": "Programming",
+    "level": "Advanced",
+    "price": "Rp 1.100.000",
+    "image": "https://images.unsplash.com/photo-1518770660439-4636190af475?w=500&q=80",
+    "instructor": { "name": "Irwan Saputra", "role": "System Architect", "avatar": "https://i.pravatar.cc/150?u=15" },
+    "details": { "duration": "42 Jam", "modules": 21, "certificate": true },
+    "stats": { "rating": 4.8, "students": 430, "lastUpdate": "2026-03-05" }
+  },
+  {
+    "id": 16,
+    "title": "3D Modeling with Blender",
+    "category": "Design",
+    "level": "Intermediate",
+    "price": "Rp 700.000",
+    "image": "https://images.unsplash.com/photo-1614850523296-d8c1af93d400?w=500&q=80",
+    "instructor": { "name": "Bambang G.", "role": "3D Artist", "avatar": "https://i.pravatar.cc/150?u=16" },
+    "details": { "duration": "28 Jam", "modules": 14, "certificate": true },
+    "stats": { "rating": 4.8, "students": 890, "lastUpdate": "2026-04-02" }
+  },
+  {
+    "id": 17,
+    "title": "SQL for Data Analytics",
+    "category": "Data",
+    "level": "Beginner",
+    "price": "Rp 450.000",
+    "image": "https://images.unsplash.com/photo-1544383335-34377af44a37?w=500&q=80",
+    "instructor": { "name": "Rina Nose", "role": "Data Analyst", "avatar": "https://i.pravatar.cc/150?u=17" },
+    "details": { "duration": "18 Jam", "modules": 9, "certificate": true },
+    "stats": { "rating": 4.7, "students": 3100, "lastUpdate": "2026-03-12" }
+  },
+  {
+    "id": 18,
+    "title": "Networking with Cisco CCNA",
+    "category": "IT Ops",
+    "level": "Intermediate",
+    "price": "Rp 1.300.000",
+    "image": "https://images.unsplash.com/photo-1558494949-ef010cbdcc51?w=500&q=80",
+    "instructor": { "name": "Tio Nugroho", "role": "Network Eng.", "avatar": "https://i.pravatar.cc/150?u=18" },
+    "details": { "duration": "45 Jam", "modules": 20, "certificate": true },
+    "stats": { "rating": 4.9, "students": 210, "lastUpdate": "2026-02-12" }
+  },
+  {
+    "id": 19,
+    "title": "Social Media Management",
+    "category": "Marketing",
+    "level": "Beginner",
+    "price": "Rp 350.000",
+    "image": "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=500&q=80",
+    "instructor": { "name": "Sarah Wijaya", "role": "SMM Lead", "avatar": "https://i.pravatar.cc/150?u=19" },
+    "details": { "duration": "12 Jam", "modules": 6, "certificate": true },
+    "stats": { "rating": 4.6, "students": 4200, "lastUpdate": "2026-03-18" }
+  },
+  {
+    "id": 20,
+    "title": "JavaScript Clean Code",
+    "category": "Programming",
+    "level": "Advanced",
+    "price": "Rp 600.000",
+    "image": "https://images.unsplash.com/photo-1507721999472-8ed4421c4af2?w=500&q=80",
+    "instructor": { "name": "Fikri", "role": "Senior Dev", "avatar": "https://i.pravatar.cc/150?u=20" },
+    "details": { "duration": "20 Jam", "modules": 10, "certificate": true },
+    "stats": { "rating": 5.0, "students": 1500, "lastUpdate": "2026-04-06" }
+  }
+]
