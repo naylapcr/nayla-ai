@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import InputGroup from './components/InputGroup.jsx';
 
+
+export default function BugReportForm(){
 const BugReportForm = () => {
   const [formData, setFormData] = useState({ reporter: '', project: '', description: '', category: '', priority: '' });
   const [errors, setErrors] = useState({});
@@ -111,5 +113,4 @@ const BugReportForm = () => {
     </div>
   );
 };
-
-export default BugReportForm;
+}

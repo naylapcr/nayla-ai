@@ -1,0 +1,390 @@
+[
+  {
+    "id": 1,
+    "car_name": "Tesla Model 3",
+    "brand": "Tesla",
+    "category": "Electric",
+    "price_per_day": 1500000,
+    "image": "https://images.unsplash.com/photo-1560958089-b8a1929cea89?q=80&w=600",
+    "status": "Available",
+    "specifications": {
+      "transmission": "Automatic",
+      "fuel_type": "Electric",
+      "seats": 5
+    },
+    "rent_details": {
+      "min_rent": 1,
+      "deposit": 500000,
+      "insurance": "All Risk"
+    },
+    "owner": {
+      "name": "Budi Drive",
+      "rating": 4.9,
+      "verified": true
+    }
+  },
+  {
+    "id": 2,
+    "car_name": "Toyota Alphard",
+    "brand": "Toyota",
+    "category": "Luxury",
+    "price_per_day": 2500000,
+    "image": "https://images.unsplash.com/photo-1619767886558-efdc259cde1a?q=80&w=600",
+    "status": "Available",
+    "specifications": {
+      "transmission": "Automatic",
+      "fuel_type": "Petrol",
+      "seats": 7
+    },
+    "rent_details": {
+      "min_rent": 1,
+      "deposit": 1000000,
+      "insurance": "Basic"
+    },
+    "owner": { "name": "VVIP Rent", "rating": 5.0, "verified": true }
+  },
+  {
+    "id": 3,
+    "car_name": "Honda Civic Type R",
+    "brand": "Honda",
+    "category": "Sport",
+    "price_per_day": 3000000,
+    "image": "https://images.unsplash.com/photo-1605515298946-d062f2e9da53?q=80&w=600",
+    "status": "Booked",
+    "specifications": {
+      "transmission": "Manual",
+      "fuel_type": "Petrol",
+      "seats": 4
+    },
+    "rent_details": {
+      "min_rent": 2,
+      "deposit": 2000000,
+      "insurance": "Premium"
+    },
+    "owner": { "name": "Speedy Rent", "rating": 4.8, "verified": false }
+  },
+  {
+    "id": 4,
+    "car_name": "Mitsubishi Pajero Sport",
+    "brand": "Mitsubishi",
+    "category": "SUV",
+    "price_per_day": 1200000,
+    "image": "https://images.unsplash.com/photo-1519245659620-e859806a8d3b?q=80&w=600",
+    "status": "Available",
+    "specifications": {
+      "transmission": "Automatic",
+      "fuel_type": "Diesel",
+      "seats": 7
+    },
+    "rent_details": {
+      "min_rent": 1,
+      "deposit": 500000,
+      "insurance": "All Risk"
+    },
+    "owner": { "name": "Adventure Car", "rating": 4.7, "verified": true }
+  },
+  {
+    "id": 5,
+    "car_name": "Suzuki Jimny",
+    "brand": "Suzuki",
+    "category": "Offroad",
+    "price_per_day": 900000,
+    "image": "https://images.unsplash.com/photo-1581432470776-880620869d80?q=80&w=600",
+    "status": "Available",
+    "specifications": {
+      "transmission": "Automatic",
+      "fuel_type": "Petrol",
+      "seats": 4
+    },
+    "rent_details": { 
+        "min_rent": 1, 
+        "deposit": 400000, 
+        "insurance": "Basic" 
+    },
+    "owner": { "name": "Go Wild", "rating": 4.6, "verified": true }
+  },
+  {
+    "id": 6,
+    "car_name": "BMW M4",
+    "brand": "BMW",
+    "category": "Sport",
+    "price_per_day": 4500000,
+    "image": "https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=600",
+    "status": "Available",
+    "specifications": {
+      "transmission": "Automatic",
+      "fuel_type": "Petrol",
+      "seats": 2
+    },
+    "rent_details": {
+      "min_rent": 1,
+      "deposit": 5000000,
+      "insurance": "Full Coverage"
+    },
+    "owner": { "name": "Luxury Wheels", "rating": 4.9, "verified": true }
+  },
+  {
+    "id": 7,
+    "car_name": "Toyota Avanza",
+    "brand": "Toyota",
+    "category": "MPV",
+    "price_per_day": 450000,
+    "image": "https://images.unsplash.com/photo-1634842510258-0051130d22c9?q=80&w=600",
+    "status": "Available",
+    "specifications": {
+      "transmission": "Manual",
+      "fuel_type": "Petrol",
+      "seats": 7
+    },
+    "rent_details": { 
+        "min_rent": 1, 
+        "deposit": 200000, 
+        "insurance": "None" 
+    },
+    "owner": { "name": "Keluarga Rent", "rating": 4.5, "verified": false }
+  },
+  {
+    "id": 8,
+    "car_name": "Hyundai Ioniq 5",
+    "brand": "Hyundai",
+    "category": "Electric",
+    "price_per_day": 1300000,
+    "image": "https://images.unsplash.com/photo-1661347333292-38483882bb21?q=80&w=600",
+    "status": "Booked",
+    "specifications": {
+      "transmission": "Automatic",
+      "fuel_type": "Electric",
+      "seats": 5
+    },
+    "rent_details": {
+      "min_rent": 1,
+      "deposit": 600000,
+      "insurance": "All Risk"
+    },
+    "owner": { "name": "Eco Drive", "rating": 4.8, "verified": true }
+  },
+  {
+    "id": 9,
+    "car_name": "Jeep Wrangler",
+    "brand": "Jeep",
+    "category": "Offroad",
+    "price_per_day": 2000000,
+    "image": "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?q=80&w=600",
+    "status": "Available",
+    "specifications": {
+      "transmission": "Automatic",
+      "fuel_type": "Petrol",
+      "seats": 4
+    },
+    "rent_details": { 
+        "min_rent": 2, 
+        "deposit": 1500000, 
+        "insurance": "Basic" 
+    },
+    "owner": { "name": "Mountain King", "rating": 4.7, "verified": true }
+  },
+  {
+    "id": 10,
+    "car_name": "Mercedes-Benz G63",
+    "brand": "Mercedes",
+    "category": "Luxury",
+    "price_per_day": 7000000,
+    "image": "https://images.unsplash.com/photo-1520031441872-265e4ff70366?q=80&w=600",
+    "status": "Available",
+    "specifications": {
+      "transmission": "Automatic",
+      "fuel_type": "Petrol",
+      "seats": 5
+    },
+    "rent_details": {
+      "min_rent": 1,
+      "deposit": 10000000,
+      "insurance": "Premium"
+    },
+    "owner": { "name": "Elite Auto", "rating": 5.0, "verified": true }
+  },
+  {
+    "id": 11,
+    "car_name": "Daihatsu Gran Max",
+    "brand": "Daihatsu",
+    "category": "Van",
+    "price_per_day": 350000,
+    "image": "https://images.unsplash.com/photo-1565026057447-bc90a3dceb87?q=80&w=600",
+    "status": "Available",
+    "specifications": {
+      "transmission": "Manual",
+      "fuel_type": "Petrol",
+      "seats": 3
+    },
+    "rent_details": { "min_rent": 1, "deposit": 200000, "insurance": "None" },
+    "owner": { "name": "Logistik Rent", "rating": 4.2, "verified": false }
+  },
+  {
+    "id": 12,
+    "car_name": "Porsche 911 Carrera",
+    "brand": "Porsche",
+    "category": "Sport",
+    "price_per_day": 8500000,
+    "image": "https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=600",
+    "status": "Available",
+    "specifications": {
+      "transmission": "Automatic",
+      "fuel_type": "Petrol",
+      "seats": 2
+    },
+    "rent_details": {
+      "min_rent": 1,
+      "deposit": 15000000,
+      "insurance": "Full Coverage"
+    },
+    "owner": { "name": "Exotic Car Bali", "rating": 4.9, "verified": true }
+  },
+  {
+    "id": 13,
+    "car_name": "Wuling Air EV",
+    "brand": "Wuling",
+    "category": "Electric",
+    "price_per_day": 600000,
+    "image": "https://images.unsplash.com/photo-1678912990885-30588667824c?q=80&w=600",
+    "status": "Available",
+    "specifications": {
+      "transmission": "Automatic",
+      "fuel_type": "Electric",
+      "seats": 4
+    },
+    "rent_details": {
+      "min_rent": 1,
+      "deposit": 300000,
+      "insurance": "All Risk"
+    },
+    "owner": { "name": "City Go", "rating": 4.7, "verified": true }
+  },
+  {
+    "id": 14,
+    "car_name": "Mazda CX-5",
+    "brand": "Mazda",
+    "category": "SUV",
+    "price_per_day": 1100000,
+    "image": "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=600",
+    "status": "Booked",
+    "specifications": {
+      "transmission": "Automatic",
+      "fuel_type": "Petrol",
+      "seats": 5
+    },
+    "rent_details": { "min_rent": 1, "deposit": 500000, "insurance": "Basic" },
+    "owner": { "name": "Skyline Rent", "rating": 4.6, "verified": true }
+  },
+  {
+    "id": 15,
+    "car_name": "Range Rover Sport",
+    "brand": "Land Rover",
+    "category": "Luxury",
+    "price_per_day": 5000000,
+    "image": "https://images.unsplash.com/photo-1606611013016-969c19ba27bb?q=80&w=600",
+    "status": "Available",
+    "specifications": {
+      "transmission": "Automatic",
+      "fuel_type": "Diesel",
+      "seats": 5
+    },
+    "rent_details": {
+      "min_rent": 1,
+      "deposit": 8000000,
+      "insurance": "Premium"
+    },
+    "owner": { "name": "Royal Wheels", "rating": 5.0, "verified": true }
+  },
+  {
+    "id": 16,
+    "car_name": "Toyota Hilux 4x4",
+    "brand": "Toyota",
+    "category": "Offroad",
+    "price_per_day": 1400000,
+    "image": "https://images.unsplash.com/photo-1621932953986-15fcfec8327c?q=80&w=600",
+    "status": "Available",
+    "specifications": {
+      "transmission": "Manual",
+      "fuel_type": "Diesel",
+      "seats": 5
+    },
+    "rent_details": { "min_rent": 2, "deposit": 1000000, "insurance": "Basic" },
+    "owner": { "name": "Pro Rent", "rating": 4.4, "verified": true }
+  },
+  {
+    "id": 17,
+    "car_name": "Mini Cooper S",
+    "brand": "Mini",
+    "category": "Luxury",
+    "price_per_day": 1800000,
+    "image": "https://images.unsplash.com/photo-1593440429974-24361685743b?q=80&w=600",
+    "status": "Available",
+    "specifications": {
+      "transmission": "Automatic",
+      "fuel_type": "Petrol",
+      "seats": 4
+    },
+    "rent_details": {
+      "min_rent": 1,
+      "deposit": 2000000,
+      "insurance": "All Risk"
+    },
+    "owner": { "name": "Stylish Ride", "rating": 4.8, "verified": true }
+  },
+  {
+    "id": 18,
+    "car_name": "Nissan GT-R",
+    "brand": "Nissan",
+    "category": "Sport",
+    "price_per_day": 6500000,
+    "image": "https://images.unsplash.com/photo-1580273916550-e323be2ae537?q=80&w=600",
+    "status": "Available",
+    "specifications": {
+      "transmission": "Automatic",
+      "fuel_type": "Petrol",
+      "seats": 4
+    },
+    "rent_details": {
+      "min_rent": 1,
+      "deposit": 10000000,
+      "insurance": "Full Coverage"
+    },
+    "owner": { "name": "Godzilla Rent", "rating": 4.9, "verified": true }
+  },
+  {
+    "id": 19,
+    "car_name": "Volkswagen Beetle",
+    "brand": "Volkswagen",
+    "category": "Classic",
+    "price_per_day": 800000,
+    "image": "https://images.unsplash.com/photo-1489824904134-891ab64532f1?q=80&w=600",
+    "status": "Available",
+    "specifications": {
+      "transmission": "Manual",
+      "fuel_type": "Petrol",
+      "seats": 4
+    },
+    "rent_details": { "min_rent": 1, "deposit": 500000, "insurance": "None" },
+    "owner": { "name": "Vintage Car", "rating": 4.5, "verified": false }
+  },
+  {
+    "id": 20,
+    "car_name": "Lexus LM 350",
+    "brand": "Lexus",
+    "category": "Luxury",
+    "price_per_day": 4000000,
+    "image": "https://images.unsplash.com/photo-1621259182978-f09e5e2ca1ff?q=80&w=600",
+    "status": "Booked",
+    "specifications": {
+      "transmission": "Automatic",
+      "fuel_type": "Petrol",
+      "seats": 4
+    },
+    "rent_details": {
+      "min_rent": 1,
+      "deposit": 5000000,
+      "insurance": "Premium"
+    },
+    "owner": { "name": "Sultan Rent", "rating": 5.0, "verified": true }
+  }
+]

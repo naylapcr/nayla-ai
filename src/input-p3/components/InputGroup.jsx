@@ -1,6 +1,6 @@
 import React from 'react';
 
-const InputGroup = ({ label, type = "text", name, value, onChange, error, options }) => {
+export default InputGroup({ label, type = "text", name, value, onChange, error, options }){
   return (
     <div style={{ marginBottom: '22px', textAlign: 'left' }}>
       <label style={{ 
@@ -49,4 +49,3 @@ const InputGroup = ({ label, type = "text", name, value, onChange, error, option
   );
 };
 
-export default InputGroup;

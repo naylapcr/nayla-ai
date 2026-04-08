@@ -1,12 +1,14 @@
 import { createRoot } from "react-dom/client";
 import Tailwindcss from "./Tailwindcss";
 import './tailwind.css';  
-import CarManager from "./CarManager";
+import UserForm from "./UserForm";
+import BugReportForm from "./BugReportForm";
 
 createRoot(document.getElementById("root"))
   .render(
     <div>
       {/* <Tailwindcss /> */}
-      <CarManager/>
+      <BugReportForm/>
+      {/* <UserForm/> */}
     </div>
   );
