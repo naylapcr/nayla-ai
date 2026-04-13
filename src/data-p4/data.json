@@ -89,7 +89,7 @@
     "brand": "Suzuki",
     "category": "Offroad",
     "price_per_day": 900000,
-    "image": "https://images.unsplash.com/photo-1581432470776-880620869d80?q=80&w=600",
+    "image": "https://mobilsuzukibatam.com/wp-content/uploads/2025/01/jimny-5-doors-batam-600x400.png",
     "status": "Available",
     "specifications": {
       "transmission": "Automatic",
@@ -129,7 +129,7 @@
     "brand": "Toyota",
     "category": "MPV",
     "price_per_day": 450000,
-    "image": "https://images.unsplash.com/photo-1634842510258-0051130d22c9?q=80&w=600",
+    "image": "https://thumb.katadata.co.id/frontend/thumbnail/2024/05/17/zigi-6646bb003548e-harga-tiket-timnas-indonesia-setara-cicilan-toyota-avanza-e_910_512.jpg",
     "status": "Available",
     "specifications": {
       "transmission": "Manual",
@@ -149,7 +149,7 @@
     "brand": "Hyundai",
     "category": "Electric",
     "price_per_day": 1300000,
-    "image": "https://images.unsplash.com/photo-1661347333292-38483882bb21?q=80&w=600",
+    "image": "https://res.cloudinary.com/mufautoshow/image/upload/f_auto,f_auto/w_1200/v1742877955/moas/news/1742877953_hyundai-ioniq-5-n-mobil-sport-listrik-untuk-sehari-hari.png",
     "status": "Booked",
     "specifications": {
       "transmission": "Automatic",
@@ -209,7 +209,7 @@
     "brand": "Daihatsu",
     "category": "Van",
     "price_per_day": 350000,
-    "image": "https://images.unsplash.com/photo-1565026057447-bc90a3dceb87?q=80&w=600",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQywItcWgmPA1RgKSf6Ljumd_TfVCHeeapV1Q&s",
     "status": "Available",
     "specifications": {
       "transmission": "Manual",
@@ -245,7 +245,7 @@
     "brand": "Wuling",
     "category": "Electric",
     "price_per_day": 600000,
-    "image": "https://images.unsplash.com/photo-1678912990885-30588667824c?q=80&w=600",
+    "image": "https://imgcdn.oto.com/large/gallery/exterior/110/2615/wuling-ev-front-angle-low-view-266132.jpg",
     "status": "Available",
     "specifications": {
       "transmission": "Automatic",
@@ -301,7 +301,7 @@
     "brand": "Toyota",
     "category": "Offroad",
     "price_per_day": 1400000,
-    "image": "https://images.unsplash.com/photo-1621932953986-15fcfec8327c?q=80&w=600",
+    "image": "https://astrido.s3.amazonaws.com/wp-content/uploads/2020/09/hilux-d-cab-3.png",
     "status": "Available",
     "specifications": {
       "transmission": "Manual",
@@ -317,7 +317,7 @@
     "brand": "Mini",
     "category": "Luxury",
     "price_per_day": 1800000,
-    "image": "https://images.unsplash.com/photo-1593440429974-24361685743b?q=80&w=600",
+    "image": "https://res.cloudinary.com/mufautoshow/image/upload/f_auto,f_auto/w_1200/v1719763683/moas/news/1719763680_mini-3-door-hatchback-ikonik-dengan-mesin-yang-bandel.png",
     "status": "Available",
     "specifications": {
       "transmission": "Automatic",
@@ -373,7 +373,7 @@
     "brand": "Lexus",
     "category": "Luxury",
     "price_per_day": 4000000,
-    "image": "https://images.unsplash.com/photo-1621259182978-f09e5e2ca1ff?q=80&w=600",
+    "image": "https://www.lexus.co.id/content/dam/lexus-v3-blueprint/models/mpv/lm/my24/lm-350h-4-seater/gallery/my24-lexus-lm350h-gallery-ext-01-d.jpg",
     "status": "Booked",
     "specifications": {
       "transmission": "Automatic",
