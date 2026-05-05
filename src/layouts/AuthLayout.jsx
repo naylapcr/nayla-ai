@@ -1,11 +1,12 @@
 import React from 'react';
+import { Outlet } from 'react-router-dom';
 
-export default function AuthLayout({ children }) {
+export default function AuthLayout() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#fff5f5]">
-      <div className="bg-white p-10 rounded-[3rem] shadow-xl border border-pink-50 w-full max-w-md">
-        {children}
-      </div>
+    <div className="min-h-screen bg-[#050505] selection:bg-[#6366f1]/30 selection:text-white">
+      <main>
+        <Outlet />
+      </main>
     </div>
   );
 }

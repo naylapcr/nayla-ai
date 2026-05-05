@@ -1,8 +1,8 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { 
-  FaThLarge, FaBox, FaShoppingBag, FaStar, 
-  FaCog, FaBug, FaUserCircle 
+  FaThLarge, FaBox, FaShoppingBag, 
+  FaStar, FaCog, FaBug, FaSignOutAlt 
 } from "react-icons/fa";
 
 export default function Sidebar() {
@@ -21,39 +21,68 @@ export default function Sidebar() {
   ];
 
   return (
-    <div className="w-64 bg-white min-h-screen border-r border-pink-50 p-8 flex flex-col sticky top-0 font-sans">
-      <div className="mb-12 px-2">
-        <div className="flex items-center gap-1">
-          <h1 className="text-3xl font-light italic tracking-tight text-[#f8b4b4]">Luneve</h1>
-          <span className="text-[8px] self-start mt-2 text-gray-300">®</span>
+    <aside className="w-72 min-h-screen bg-[#F9FAFB] border-r border-gray-100 flex flex-col p-6 font-sans">
+      {/* 1. Brand Logo - Minimalis */}
+      <div className="mb-12 px-4">
+        <h1 className="text-2xl font-black text-gray-900 tracking-tighter italic">
+          Luneve<span className="text-emerald-500">.</span>
+        </h1>
+        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em] mt-1">
+          Boutique Admin
+        </p>
+      </div>
+
+      {/* 2. Main Menu Section */}
+      <div className="flex-1 flex flex-col gap-1">
+        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest px-4 mb-4">
+          Main Menu
+        </p>
+        {menus.map((menu) => (
+          <NavLink
+            key={menu.name}
+            to={menu.path}
+            className={({ isActive }) => `
+              flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-300 group
+              ${isActive 
+                ? "bg-white text-gray-900 shadow-[0_10px_20px_rgba(0,0,0,0.04)] font-bold" 
+                : "text-gray-400 hover:text-gray-600 hover:bg-gray-50"}
+            `}
+          >
+            <span className="text-lg">{menu.icon}</span>
+            <span className="text-sm">{menu.name}</span>
+          </NavLink>
+        ))}
+
+        {/* 3. System Test Section (Error Pages) */}
+        <div className="mt-10">
+          <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest px-4 mb-4">
+            System Test
+          </p>
+          {errorMenus.map((menu) => (
+            <NavLink
+              key={menu.name}
+              to={menu.path}
+              className={({ isActive }) => `
+                flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-300
+                ${isActive 
+                  ? "bg-white text-gray-900 shadow-sm font-bold" 
+                  : "text-gray-400 hover:text-gray-600 hover:bg-gray-50"}
+              `}
+            >
+              <span className="text-lg">{menu.icon}</span>
+              <span className="text-sm">{menu.name}</span>
+            </NavLink>
+          ))}
         </div>
-        <p className="text-[9px] font-extrabold uppercase tracking-[0.3em] text-gray-300 mt-1">Administrator</p>
       </div>
-      
-      <nav className="flex-1 space-y-1">
-        <p className="text-[10px] font-extrabold text-gray-300 uppercase tracking-[0.2em] mb-4 ml-4">Main Menu</p>
-        {menus.map((m, i) => (
-          <NavLink key={i} to={m.path} className={({ isActive }) => `flex items-center space-x-4 p-4 rounded-2xl transition-all duration-300 ${isActive ? "bg-[#fff5f5] text-[#f8b4b4]" : "text-gray-400 hover:text-[#f8b4b4]"}`}>
-            <span>{m.icon}</span>
-            <span className="text-[11px] font-bold uppercase tracking-widest">{m.name}</span>
-          </NavLink>
-        ))}
 
-        <p className="text-[10px] font-extrabold text-gray-300 uppercase tracking-[0.2em] mb-4 mt-8 ml-4">System Demo</p>
-        {errorMenus.map((m, i) => (
-          <NavLink key={i} to={m.path} className={({ isActive }) => `flex items-center space-x-4 p-4 rounded-2xl transition-all duration-300 ${isActive ? "bg-[#fff5f5] text-[#f8b4b4]" : "text-gray-400 hover:text-[#f8b4b4]"}`}>
-            <span>{m.icon}</span>
-            <span className="text-[11px] font-bold uppercase tracking-widest">{m.name}</span>
-          </NavLink>
-        ))}
-      </nav>
-
-      <div className="pt-6 border-t border-pink-50">
-        <NavLink to="/login" className="flex items-center space-x-4 p-4 rounded-2xl bg-pink-50 text-[#f8b4b4] hover:bg-black hover:text-white transition-all">
-          <FaUserCircle className="text-xl" />
-          <span className="text-[11px] font-extrabold uppercase tracking-widest">Sign In</span>
-        </NavLink>
+      {/* 4. Logout Section - Bagian Bawah */}
+      <div className="mt-auto border-t border-gray-100 pt-6">
+        <button className="flex items-center gap-4 px-4 py-3.5 w-full text-rose-400 hover:text-rose-600 hover:bg-rose-50 rounded-2xl transition-all duration-300">
+          <FaSignOutAlt className="text-lg" />
+          <span className="text-sm font-bold">Logout</span>
+        </button>
       </div>
-    </div>
+    </aside>
   );
 }

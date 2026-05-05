@@ -1,67 +1,63 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { FaUser, FaEnvelope, FaLock } from 'react-icons/fa';
+import { useNavigate, Link } from 'react-router-dom';
+import { FaRegEnvelope, FaLock, FaRegEyeSlash, FaRegUser } from 'react-icons/fa';
 
 export default function Register() {
+  const navigate = useNavigate();
+
+  const handleRegister = (e) => {
+    e.preventDefault();
+    // Simulasi registrasi berhasil
+    navigate('/login');
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center p-6 bg-[#fffafb] animate-in fade-in duration-700 font-sans">
-      <div className="w-full max-w-md">
-        <div className="bg-white p-12 md:p-16 rounded-[4rem] border border-pink-50 shadow-[0_40px_80px_rgba(248,180,180,0.08)] text-center">
-          
-          <div className="mb-10">
-            <h2 className="text-3xl font-light text-gray-800 tracking-tight">
-              Create <span className="font-bold text-[#f8b4b4]">Account</span>
-            </h2>
-            <p className="text-gray-400 text-[10px] uppercase tracking-[0.2em] mt-3 font-bold">Start your journey with us</p>
-          </div>
+    <div className="min-h-screen w-full bg-[#050505] flex items-center justify-center p-6 font-sans relative overflow-hidden">
+      {/* Glow Effects */}
+      <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-[#6366f1]/20 rounded-full blur-[120px]"></div>
+      <div className="absolute bottom-[-10%] left-[-10%] w-[400px] h-[400px] bg-indigo-500/10 rounded-full blur-[100px]"></div>
 
-          <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-            <div className="relative">
-              <FaUser className="absolute left-6 top-1/2 -translate-y-1/2 text-pink-200 text-xs" />
-              <input 
-                type="text" 
-                placeholder="Full name" 
-                className="w-full pl-14 pr-8 py-5 rounded-full bg-[#fffafb] border-none outline-none text-sm font-medium focus:ring-2 focus:ring-pink-100 transition-all placeholder:text-gray-300"
-              />
-            </div>
-
-            <div className="relative">
-              <FaEnvelope className="absolute left-6 top-1/2 -translate-y-1/2 text-pink-200 text-xs" />
-              <input 
-                type="email" 
-                placeholder="Email address" 
-                className="w-full pl-14 pr-8 py-5 rounded-full bg-[#fffafb] border-none outline-none text-sm font-medium focus:ring-2 focus:ring-pink-100 transition-all placeholder:text-gray-300"
-              />
-            </div>
-
-            <div className="relative">
-              <FaLock className="absolute left-6 top-1/2 -translate-y-1/2 text-pink-200 text-xs" />
-              <input 
-                type="password" 
-                placeholder="Password" 
-                className="w-full pl-14 pr-8 py-5 rounded-full bg-[#fffafb] border-none outline-none text-sm font-medium focus:ring-2 focus:ring-pink-100 transition-all placeholder:text-gray-300"
-              />
-            </div>
-
-            <div className="pt-6">
-              <Link 
-                to="/" 
-                className="w-full py-5 bg-black text-white rounded-full flex items-center justify-center text-[11px] font-black uppercase tracking-[0.3em] hover:bg-[#f8b4b4] transition-all shadow-xl shadow-gray-200"
-              >
-                Create Account
-              </Link>
-            </div>
-          </form>
-
-          <div className="mt-10">
-            <p className="text-xs text-gray-400 font-medium">
-              Already a member? {' '}
-              <Link to="/login" className="text-[#f8b4b4] font-extrabold">
-                Sign In
-              </Link>
-            </p>
-          </div>
+      <div className="max-w-[500px] w-full bg-white/[0.03] backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-10 md:p-14 shadow-2xl relative z-10">
+        <div className="flex flex-col items-center mb-10 text-center">
+          <div className="w-14 h-14 bg-[#6366f1] rounded-2xl flex items-center justify-center text-white font-black italic text-2xl shadow-lg shadow-[#6366f1]/20 mb-4">B</div>
+          <h1 className="text-3xl font-black text-white tracking-tighter italic">Join Bloom.</h1>
+          <p className="text-gray-400 text-sm mt-3 font-medium">Start your journey to business excellence today..!</p>
         </div>
+
+        <form onSubmit={handleRegister} className="space-y-5">
+          <div className="space-y-2">
+            <label className="text-[11px] font-black text-gray-500 uppercase tracking-widest ml-1">Full Name</label>
+            <div className="relative group">
+              <FaRegUser className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[#6366f1] transition-colors" />
+              <input type="text" placeholder="Enter your Full Name" required className="w-full pl-12 pr-6 py-4 bg-white/[0.05] border border-white/10 rounded-2xl text-sm text-white focus:ring-2 focus:ring-[#6366f1]/30 transition-all outline-none" />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-[11px] font-black text-gray-500 uppercase tracking-widest ml-1">Email Address</label>
+            <div className="relative group">
+              <FaRegEnvelope className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[#6366f1] transition-colors" />
+              <input type="email" placeholder="Enter your Email" required className="w-full pl-12 pr-6 py-4 bg-white/[0.05] border border-white/10 rounded-2xl text-sm text-white focus:ring-2 focus:ring-[#6366f1]/30 transition-all outline-none" />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-[11px] font-black text-gray-500 uppercase tracking-widest ml-1">Password</label>
+            <div className="relative group">
+              <FaLock className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[#6366f1] transition-colors" />
+              <input type="password" placeholder="Create a Password" required className="w-full pl-12 pr-12 py-4 bg-white/[0.05] border border-white/10 rounded-2xl text-sm text-white focus:ring-2 focus:ring-[#6366f1]/30 transition-all outline-none" />
+              <FaRegEyeSlash className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer" />
+            </div>
+          </div>
+
+          <button type="submit" className="w-full py-4 bg-[#6366f1] text-white rounded-2xl font-black text-sm shadow-xl shadow-[#6366f1]/20 hover:scale-[1.02] active:scale-[0.98] transition-all">
+            Create Account
+          </button>
+        </form>
+
+        <p className="text-center mt-10 text-[11px] text-gray-500 font-bold uppercase tracking-widest">
+          Already have an account? <Link to="/login" className="text-[#6366f1] hover:underline">Sign In</Link>
+        </p>
       </div>
     </div>
   );
