@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FaPlus, FaSearch, FaHeart, FaShoppingBag, FaStar } from "react-icons/fa";
 
 export default function Products() {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
 
@@ -68,7 +70,11 @@ export default function Products() {
       {/* 3. Product Grid - Premium Card Style */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {filteredProducts.map((p) => (
-          <div key={p.id} className="group bg-white rounded-[2.5rem] border border-gray-100 overflow-hidden hover:shadow-2xl hover:shadow-indigo-500/5 transition-all duration-500 relative">
+          <div 
+            key={p.id} 
+            onClick={() => navigate(`/products/${p.id}`)}
+            className="group bg-white rounded-[2.5rem] border border-gray-100 overflow-hidden hover:shadow-2xl hover:shadow-indigo-500/5 transition-all duration-500 relative cursor-pointer"
+          >
             
             {/* Stock Badge */}
             <div className={`absolute top-5 left-5 z-10 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest backdrop-blur-md ${

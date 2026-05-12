@@ -12,6 +12,7 @@ const Reviews = lazy(() => import('./pages/Reviews'));
 const Settings = lazy(() => import('./pages/Settings'));
 const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
+const ProductDetail = lazy(() => import("./pages/ProductDetail"));
 
 // Import Layouts
 import MainLayout from './layouts/MainLayout';
@@ -34,6 +35,7 @@ function App() {
             <Route path="orders" element={<Orders />} />
             <Route path="reviews" element={<Reviews />} />
             <Route path="settings" element={<Settings />} />
+            <Route path="/products/:id" element={<ProductDetail />} />
             
             {/* Rute Error - Sekarang pasti jalan! */}
             <Route path="400" element={<BadRequest />} />
