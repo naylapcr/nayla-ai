@@ -16,6 +16,7 @@ const ProductDetail = lazy(() => import("./pages/ProductDetail"));
 
 // Import Layouts
 import MainLayout from './layouts/MainLayout';
+import ManagementHub from './pages/ManagementHub';
 // Jika kamu tidak punya AuthLayout, hapus saja dan bungkus Login/Register dengan div biasa
 const AuthLayout = ({ children }) => <div className="min-h-screen bg-[#fffafb] flex items-center justify-center">{children}</div>;
 
@@ -36,6 +37,7 @@ function App() {
             <Route path="reviews" element={<Reviews />} />
             <Route path="settings" element={<Settings />} />
             <Route path="/products/:id" element={<ProductDetail />} />
+            <Route path="management" element={<ManagementHub />} />
             
             {/* Rute Error - Sekarang pasti jalan! */}
             <Route path="400" element={<BadRequest />} />

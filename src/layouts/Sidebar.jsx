@@ -12,6 +12,7 @@ export default function Sidebar() {
     { name: "Orders", path: "/orders", icon: <FaShoppingBag /> },
     { name: "Reviews", path: "/reviews", icon: <FaStar /> },
     { name: "Settings", path: "/settings", icon: <FaCog /> },
+    { name: "Management", path: "/management", icon: <FaCog /> },
   ];
 
   const errorMenus = [
