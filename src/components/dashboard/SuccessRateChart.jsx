@@ -2,7 +2,7 @@ import React from 'react';
 import { FaChevronDown, FaArrowTrendUp, FaDollarSign } from 'react-icons/fa6';
 
 export default function SuccessRateChart() {
-  // Jumlah segmen dibuat ideal (35 batang) agar kerapatan lengkungannya mulus seperti contoh
+ 
   const totalSegments = 35;
   const segments = Array.from({ length: totalSegments });
   const successPercentage = 78.6;
