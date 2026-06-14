@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   FaChevronDown,
   FaArrowTrendUp,
@@ -19,22 +20,18 @@ import ProfitChart from "../components/dashboard/ProfitChart";
 import SuccessRateChart from "../components/dashboard/SuccessRateChart";
 import SalesOverview from "../components/dashboard/SalesOverview";
 import TopProductItem from "../components/dashboard/TopProductItem";
-// Tambah import ini di bagian atas
 import DateRangePicker from "../components/dashboard/DateRangePicker";
 
-
 export default function AdminDashboard() {
-  // --- STATE UNTUK SHADCN UI COMPONENTS ---
-  // State untuk Komponen 1: Dialog (Modal Detail Order)
+  const navigate = useNavigate();
+
+  // --- STATE MANAGEMENT ---
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
-
-  // State untuk Komponen 2: Dropdown Menu Profil
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
-
-  // State untuk Komponen 3: Tooltip (Menyimpan ID baris yang di-hover)
   const [activeTooltipId, setActiveTooltipId] = useState(null);
 
+  // --- DUMMY DATA ---
   const stats = [
     { label: "Total Sales", val: "12,485", trend: "+3.1%", isUp: true },
     { label: "Total Revenue", val: "$68,760", trend: "+2.4%", isUp: true },
@@ -83,7 +80,6 @@ export default function AdminDashboard() {
     { name: "Men's Jogger", earnings: 26000 },
   ];
 
-  // Fungsi untuk membuka jendela modal detail transaksi
   const openOrderDetails = (order) => {
     setSelectedOrder(order);
     setIsDialogOpen(true);
@@ -91,24 +87,23 @@ export default function AdminDashboard() {
 
   return (
     <div className="flex bg-[#F8FAFC] min-h-screen font-sans relative">
-    
-
       {/* KONTEN UTAMA */}
       <div className="flex-1 p-6 md:p-10 max-w-[1600px] mx-auto space-y-8 w-full overflow-hidden">
-        {/* TOP BAR BARU DENGAN SHADCN DROPDOWN */}
+        
+        {/* TOP BAR BARU DENGAN DROPDOWN PROFIL */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100/60 pb-4">
           <CategoryFilter />
 
           <div className="flex items-center gap-4 self-end sm:self-auto">
-
-            <DateRangePicker/>
+            <DateRangePicker />
+            
             {/* Bell Notifikasi */}
             <button className="w-10 h-10 bg-white rounded-xl border border-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-50 transition-colors relative">
               <FaRegBell size={16} />
               <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-rose-500 rounded-full"></span>
             </button>
 
-            {/* KOMPONEN 2: SHADCN DROPDOWN MENU (Profil Admin) */}
+            {/* DROPDOWN MENU PROFIL */}
             <div className="relative">
               <button
                 onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
@@ -131,7 +126,7 @@ export default function AdminDashboard() {
                 />
               </button>
 
-              {/* Menu Dropdown Isi Item */}
+              {/* Menu Dropdown Item */}
               {isProfileDropdownOpen && (
                 <>
                   <div
@@ -145,16 +140,19 @@ export default function AdminDashboard() {
                       </p>
                     </div>
                     <button className="w-full flex items-center gap-2 px-4 py-2 text-xs text-slate-600 hover:bg-slate-50 text-left font-medium">
-                      <FaUser size={12} className="text-slate-400" /> Profile
-                      Settings
+                      <FaUser size={12} className="text-slate-400" /> Profile Settings
                     </button>
                     <button className="w-full flex items-center gap-2 px-4 py-2 text-xs text-slate-600 hover:bg-slate-50 text-left font-medium">
-                      <FaGear size={12} className="text-slate-400" />{" "}
-                      Preferences
+                      <FaGear size={12} className="text-slate-400" /> Preferences
                     </button>
                     <div className="border-t border-slate-50 my-1"></div>
-                    {/* Ganti bagian button Log Out menjadi seperti ini */}
-                    <button className="w-full flex items-center gap-2 px-4 py-2 text-xs text-rose-600 hover:bg-rose-50 text-left font-bold">
+                    <button 
+                      onClick={() => {
+                        alert("Anda telah berhasil keluar.");
+                        navigate("/login");
+                      }}
+                      className="w-full flex items-center gap-2 px-4 py-2 text-xs text-rose-600 hover:bg-rose-50 text-left font-bold"
+                    >
                       <FaRightFromBracket size={12} /> Log Out
                     </button>
                   </div>
@@ -258,7 +256,6 @@ export default function AdminDashboard() {
                         </span>
                       </td>
                       <td className="py-4 pr-2 text-right relative">
-                        {/* KOMPONEN 3: SHADCN TOOLTIP (Muncul saat hover tombol aksi) */}
                         <div className="inline-block relative">
                           <button
                             onClick={() => openOrderDetails(order)}
@@ -302,7 +299,7 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* KOMPONEN 1: SHADCN DIALOG / MODAL (Pop-up Detail Order) */}
+      {/* MODAL / DIALOG POP-UP DETAIL ORDER */}
       {isDialogOpen && selectedOrder && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in duration-200">
           <div
@@ -327,7 +324,7 @@ export default function AdminDashboard() {
               </button>
             </div>
 
-            {/* Dialog Content / Info */}
+            {/* Dialog Content */}
             <div className="space-y-4">
               <div className="bg-slate-50 p-4 rounded-2xl flex items-center gap-3">
                 <span className="text-2xl">{selectedOrder.icon}</span>
@@ -349,25 +346,19 @@ export default function AdminDashboard() {
                   </p>
                 </div>
                 <div>
-                  <span className="text-slate-400 font-semibold">
-                    Order Date
-                  </span>
+                  <span className="text-slate-400 font-semibold">Order Date</span>
                   <p className="font-bold text-slate-800 mt-0.5">
                     {selectedOrder.date}
                   </p>
                 </div>
                 <div>
-                  <span className="text-slate-400 font-semibold">
-                    Payment Method
-                  </span>
+                  <span className="text-slate-400 font-semibold">Payment Method</span>
                   <p className="font-bold text-slate-800 mt-0.5">
                     {selectedOrder.payment}
                   </p>
                 </div>
                 <div>
-                  <span className="text-slate-400 font-semibold">
-                    Total Amount
-                  </span>
+                  <span className="text-slate-400 font-semibold">Total Amount</span>
                   <p className="font-black text-indigo-600 mt-0.5 text-sm">
                     {selectedOrder.amount}
                   </p>
