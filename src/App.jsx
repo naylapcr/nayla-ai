@@ -15,7 +15,8 @@ const Register = lazy(() => import('./pages/Register'));
 const ProductDetail = lazy(() => import("./pages/ProductDetail"));
 const GuestDashboard = lazy(() => import("./pages/GuestDashboard"));
 const ManagementHub = lazy(() => import('./pages/ManagementHub'));
-const CustomerManagement = lazy(() => import('./pages/CustomerManagement')); // PERBAIKAN 1: Sudah dijadikan lazy import
+const CustomerManagement = lazy(() => import('./pages/CustomerManagement'));
+ // PERBAIKAN 1: Sudah dijadikan lazy import
 
 // Import Layouts
 import MainLayout from './layouts/MainLayout';
@@ -44,7 +45,7 @@ function App() {
             <Route path="reviews" element={<Reviews />} />
             <Route path="settings" element={<Settings />} />
             <Route path="customers" element={<CustomerManagement />} />
-            
+
             {/* PERBAIKAN 4: Menghapus tanda "/" di depan products agar nested routing-nya aktif */}
             <Route path="products/:id" element={<ProductDetail />} />
             <Route path="management" element={<ManagementHub />} />

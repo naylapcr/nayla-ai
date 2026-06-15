@@ -12,25 +12,25 @@ const headers = {
 }
 
 export const authAPI = {
-    // LOGIN: Memeriksa kesesuaian email dan password
+    
     async login(email, password) {
         const response = await axios.get(`${API_URL}?email=eq.${email}&password=eq.${password}`, { headers })
         return response.data 
     },
 
-    // REGISTER: Memasukkan user baru
+    
     async register(userData) {
         const response = await axios.post(API_URL, userData, { headers })
         return response.data
     },
 
-    // FORGOT - LANGKAH 1: Memeriksa ketersediaan email di database
+    
     async checkEmailExists(email) {
         const response = await axios.get(`${API_URL}?email=eq.${email}`, { headers })
         return response.data
     },
 
-    // FORGOT - LANGKAH 2: Mengubah isi password lama menjadi baru berdasarkan email (PATCH)
+    
     async resetPassword(email, newPassword) {
         const response = await axios.patch(`${API_URL}?email=eq.${email}`, { password: newPassword }, { headers })
         return response.data
