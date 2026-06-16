@@ -144,26 +144,7 @@ export default function Register() {
             </div>
           </div>
 
-          {/* PILIHAN ROLE CUTE */}
-          <div className="space-y-2">
-            <label className="text-xs font-semibold text-rose-400 ml-1">Daftar Sebagai</label>
-            <div className="grid grid-cols-2 gap-3">
-              <button 
-                type="button" 
-                onClick={() => setRole('member')}
-                className={`p-3 rounded-2xl border-2 text-xs font-bold transition-all flex flex-col items-center gap-1 ${role === 'member' ? 'border-rose-300 bg-rose-50 text-rose-600 shadow-md' : 'border-rose-50 text-gray-400 hover:border-rose-200'}`}
-              >
-                <span className="text-lg">🛍️</span> Member
-              </button>
-              <button 
-                type="button" 
-                onClick={() => setRole('admin')}
-                className={`p-3 rounded-2xl border-2 text-xs font-bold transition-all flex flex-col items-center gap-1 ${role === 'admin' ? 'border-violet-300 bg-violet-50 text-violet-600 shadow-md' : 'border-rose-50 text-gray-400 hover:border-rose-200'}`}
-              >
-                <span className="text-lg">💻</span> Admin
-              </button>
-            </div>
-          </div>
+          
 
           <button 
             type="submit" 

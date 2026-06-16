@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
-import { FaBox, FaSearch } from "react-icons/fa";
-import { columns } from "../components/orders/Columns";
-import { OrdersDataTable } from "../components/orders/OrderDataTables";
-
+import { FaBox, FaMagnifyingGlass } from "react-icons/fa6";
 
 export default function Orders() {
   const [activeTab, setActiveTab] = useState("All");
@@ -12,74 +9,103 @@ export default function Orders() {
     { id: "#LV-9921", user: "Giselle A.", item: "Velvet Lip Tint", date: "2 Mins ago", total: "145.000", status: "Processing" },
     { id: "#LV-9920", user: "Karina J.", item: "Glow Cushion + 2 Masks", date: "1 Hour ago", total: "260.000", status: "Shipped" },
     { id: "#LV-9919", user: "Ningning V.", item: "Ethereal Palette", date: "3 Hours ago", total: "320.000", status: "Delivered" },
-    { id: "#LV-9918", user: "Winter K.", item: "Rose Dewy Mask", date: "Yesterday", total: "25.000", status: "Delivered" },
   ];
 
   const filteredOrders = orders.filter(o => activeTab === "All" || o.status === activeTab);
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-700 font-sans pb-10 px-4 md:px-0">
-
-      {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-        <div>
-          <h2 className="text-4xl font-black text-[#111827] tracking-tighter italic">
-            Order <span className="text-[#6366f1]">History</span>
+    <div className="flex bg-[#F8FAFC] min-h-screen font-sans w-full">
+      <div className="flex-1 p-6 md:p-10 max-w-[1600px] mx-auto space-y-8 w-full">
+        
+        {/* HEADER */}
+        <div className="px-2">
+          <h2 className="text-2xl font-black text-slate-900 tracking-tight">
+            Order <span className="text-pink-500">History</span>
           </h2>
-          <p className="text-gray-400 text-sm mt-1 font-medium italic">Tracking your business journey to customers.</p>
+          <p className="text-slate-400 text-xs mt-1">Tracking your business journey to customers.</p>
         </div>
-        <div className="flex bg-gray-100 p-1 rounded-full border border-gray-200">
-          {["All", "Processing", "Shipped", "Delivered"].map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${
-                activeTab === tab ? "bg-[#6366f1] text-white shadow-lg" : "text-gray-400 hover:text-[#6366f1]"
-              }`}
-            >
-              {tab}
-            </button>
-          ))}
-        </div>
-      </div>
 
-      <hr className="border-gray-100" />
+        {/* BENTO CARD */}
+        <div className="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm space-y-6">
+          
+          {/* TOP BAR: TABS & SEARCH */}
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div className="flex bg-slate-50 p-1 rounded-2xl border border-slate-100">
+              {["All", "Processing", "Shipped", "Delivered"].map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
+                    activeTab === tab ? "bg-white text-pink-600 shadow-sm" : "text-slate-400 hover:text-slate-600"
+                  }`}
+                >
+                  {tab}
+                </button>
+              ))}
+            </div>
 
-      {/* Search */}
-      <div className="relative max-w-md group">
-        <FaSearch className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-[#6366f1] transition-colors" />
-        <input
-          type="text"
-          placeholder="Search order ID or customer name..."
-          value={globalFilter}
-          onChange={(e) => setGlobalFilter(e.target.value)}
-          className="w-full pl-14 pr-8 py-4 rounded-2xl bg-white border border-gray-100 outline-none text-sm font-medium focus:ring-4 focus:ring-[#6366f1]/10 focus:border-[#6366f1]/50 transition-all shadow-sm"
-        />
-      </div>
-
-      {/* ✅ DATA TABLE */}
-      <OrdersDataTable
-        columns={columns}
-        data={filteredOrders}
-        globalFilter={globalFilter}
-        setGlobalFilter={setGlobalFilter}
-      />
-
-      {/* Summary Card */}
-      <div className="bg-[#111827] p-8 md:p-12 rounded-[3rem] flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden mt-10">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-[#6366f1]/10 rounded-full blur-[80px]"></div>
-        <div className="flex items-center gap-6 relative z-10">
-          <div className="w-16 h-16 bg-[#6366f1] rounded-2xl flex items-center justify-center text-2xl text-white shadow-lg shadow-indigo-500/20">
-            <FaBox />
+            <div className="relative w-full sm:w-64">
+              <FaMagnifyingGlass className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={12} />
+              <input
+                type="text"
+                placeholder="Search ID or customer..."
+                value={globalFilter}
+                onChange={(e) => setGlobalFilter(e.target.value)}
+                className="w-full bg-slate-50 pl-9 pr-4 py-2.5 rounded-xl text-xs font-medium border-0 focus:ring-2 focus:ring-pink-500/20 outline-none transition-all"
+              />
+            </div>
           </div>
-          <div>
-            <h5 className="text-xl font-black text-white tracking-tight">Ready to pack?</h5>
-            <p className="text-sm text-gray-400 font-medium italic">There are 12 orders waiting for your touch.</p>
+
+          {/* TABLE */}
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b border-slate-100 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                  <th className="pb-4 pl-2">Order ID</th>
+                  <th className="pb-4">Customer</th>
+                  <th className="pb-4">Item</th>
+                  <th className="pb-4">Date</th>
+                  <th className="pb-4">Total</th>
+                  <th className="pb-4 pr-2">Status</th>
+                </tr>
+              </thead>
+              <tbody className="text-xs divide-y divide-slate-50">
+                {filteredOrders.map((order) => (
+                  <tr key={order.id} className="hover:bg-slate-50/40 transition-colors">
+                    <td className="py-5 pl-2 font-bold text-slate-900">{order.id}</td>
+                    <td className="py-5 font-bold text-slate-700">{order.user}</td>
+                    <td className="py-5 font-medium text-slate-600">{order.item}</td>
+                    <td className="py-5 text-slate-400">{order.date}</td>
+                    <td className="py-5 font-bold text-slate-900">Rp{order.total}</td>
+                    <td className="py-5 pr-2">
+                      <span className={`px-2.5 py-1 rounded-lg text-[10px] font-bold tracking-wide ${
+                        order.status === "Delivered" ? "bg-emerald-50 text-emerald-600" : "bg-amber-50 text-amber-600"
+                      }`}>
+                        {order.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
-        <button className="relative z-10 bg-[#6366f1] text-white px-10 py-4 rounded-full text-[11px] font-black uppercase tracking-widest hover:bg-white hover:text-[#111827] transition-all shadow-xl shadow-indigo-500/20">
-          Go to Warehouse
-        </button>
+
+        {/* SUMMARY CARD */}
+        <div className="bg-slate-900 p-8 md:p-10 rounded-[2.5rem] flex items-center justify-between gap-8 relative overflow-hidden">
+          <div className="flex items-center gap-6 relative z-10">
+            <div className="w-14 h-14 bg-pink-500 rounded-2xl flex items-center justify-center text-white">
+              <FaBox size={20} />
+            </div>
+            <div>
+              <h5 className="text-lg font-black text-white tracking-tight">Ready to pack?</h5>
+              <p className="text-xs text-slate-400 font-medium">There are 12 orders waiting for your action.</p>
+            </div>
+          </div>
+          <button className="bg-white text-slate-900 px-8 py-3 rounded-2xl text-[11px] font-black uppercase tracking-widest hover:bg-pink-50 transition-all">
+            Warehouse
+          </button>
+        </div>
       </div>
     </div>
   );
