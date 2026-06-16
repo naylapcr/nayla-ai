@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Ditambahkan useNavigate untuk redirect
 import { FaSearch, FaShoppingBag, FaStar, FaHeart, FaRegHeart, FaTruck, FaUndo, FaShieldAlt, FaWhatsapp, FaChevronDown, FaLeaf, FaHandSparkles, FaCertificate, FaThumbsUp, FaRegThumbsUp, FaCheckCircle } from "react-icons/fa";
 
 export default function GuestDashboard() {
+  const navigate = useNavigate(); // Hook untuk navigasi programatis
   const [searchQuery, setSearchQuery] = useState("");
-  const [cartCount, setCartCount] = useState(0);
   const [likedProducts, setLikedProducts] = useState({});
   const [selectedShades, setSelectedShades] = useState({});
   const [toast, setToast] = useState({ show: false, message: "" });
@@ -13,7 +13,6 @@ export default function GuestDashboard() {
   
   // Voucher States
   const [voucherCode, setVoucherCode] = useState("");
-  const [discount, setDiscount] = useState(0);
   const [voucherMsg, setVoucherMsg] = useState({ type: "", text: "" });
 
   // Flash Sale & Review Interactive States
@@ -60,9 +59,9 @@ export default function GuestDashboard() {
     return () => clearInterval(interval);
   }, []);
 
-  const handleAddToBag = (name) => {
-    setCartCount(prev => prev + 1);
-    setToast({ show: true, message: `${name} added to bag! 💖` });
+  // Jika tamu klik Add to Bag, langsung lempar ke halaman Login
+  const handleAddToBag = () => {
+    navigate('/login');
   };
 
   const toggleLike = (id) => {
@@ -77,15 +76,12 @@ export default function GuestDashboard() {
     e.preventDefault();
     const code = voucherCode.toUpperCase();
     if (code === "GLAM20") {
-      setDiscount(20);
       setVoucherMsg({ type: "success", text: "Yay! 20% discount applied! 💖" });
       setToast({ show: true, message: "Voucher GLAM20 applied! 🎉" });
     } else if (code === "LUNEVE50K") {
-      setDiscount(50000);
       setVoucherMsg({ type: "success", text: "Rp 50.000 discount applied! 🎀" });
       setToast({ show: true, message: "Voucher LUNEVE50K applied! 🎉" });
     } else {
-      setDiscount(0);
       setVoucherMsg({ type: "error", text: "Invalid code. Try again! 🥺" });
     }
   };
@@ -161,7 +157,6 @@ export default function GuestDashboard() {
       shades: [{name: "Jet Black", hex: "#1A1A1A"}, {name: "Dark Brown", hex: "#4A3B2A"}],
       isBestSeller: false, isFlashSale: false
     },
-    
   ];
 
   const reviewsData = [
@@ -203,18 +198,18 @@ export default function GuestDashboard() {
         <FaWhatsapp className="text-2xl" />
       </a>
 
-      {/* PROMO BANNER */}
+      {/* PROMO BANNER - Pakai Link Register */}
       <div className="bg-gradient-to-r from-rose-200 to-purple-200 text-rose-800 text-center py-2.5 text-[11px] font-bold tracking-wider uppercase">
-        Free Shipping on Orders Over Rp 500K 🛍️ | <span className="underline cursor-pointer hover:text-rose-600 transition-colors">Shop Now</span>
+        Free Shipping on Orders Over Rp 500K 🛍️ | <Link to="/register" className="underline cursor-pointer hover:text-rose-600 transition-colors">Gabung Sekarang</Link>
       </div>
 
-      {/* NAVBAR */}
+      {/* NAVBAR - Diperbaiki Pakai Link Login & Register */}
       <nav className="bg-white/80 border-b border-rose-50 sticky top-0 z-50 backdrop-blur-lg">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
           <div className="flex items-center gap-10">
-            <h1 className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-purple-300 tracking-tight">
+            <Link to="/" className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-purple-300 tracking-tight">
               LUNEVE
-            </h1>
+            </Link>
             <div className="hidden lg:flex items-center gap-8 text-[11px] font-bold uppercase tracking-[0.15em] text-gray-400">
               <a href="#catalogue" className="hover:text-rose-400 transition-colors duration-300">Shop</a>
               <a href="#benefits" className="hover:text-rose-400 transition-colors duration-300">About</a>
@@ -223,7 +218,7 @@ export default function GuestDashboard() {
             </div>
           </div>
           
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4">
             <div className="hidden md:block relative w-64 group">
               <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-rose-300 group-focus-within:text-rose-400 transition-colors text-xs" />
               <input
@@ -235,22 +230,19 @@ export default function GuestDashboard() {
                 className="w-full pl-10 pr-6 py-2.5 rounded-full bg-rose-50/50 border border-rose-100 outline-none text-xs font-medium focus:ring-2 focus:ring-rose-100 focus:border-rose-200 transition-all placeholder:text-rose-300"
               />
             </div>
-            <Link to="/admin" className="text-[10px] font-bold uppercase tracking-wider text-gray-400 hover:text-rose-400 transition-all">
-              Admin
+            
+            {/* TOMBOL LOGIN & REGISTER YANG SUDAH DIPASTIKAN BERFUNGSI */}
+            <Link to="/login" className="text-[11px] font-bold text-rose-400 hover:text-rose-600 transition-colors">
+              Login
             </Link>
-            <button className="relative text-rose-400 hover:text-rose-500 transition-colors p-2">
-              <FaShoppingBag className="text-xl" />
-              {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-purple-300 text-purple-800 w-5 h-5 rounded-full text-[10px] flex items-center justify-center font-bold animate-bounce">
-                  {cartCount}
-                </span>
-              )}
-            </button>
+            <Link to="/register" className="bg-gradient-to-r from-rose-300 to-purple-200 text-rose-700 px-5 py-2 rounded-full text-[11px] font-bold hover:shadow-md transition-all border border-rose-200/50">
+              Register ✨
+            </Link>
           </div>
         </div>
       </nav>
 
-      {/* HERO SECTION */}
+      {/* HERO SECTION - CTA ke Register */}
       <section id="hero" className="relative min-h-[85vh] flex items-center bg-gradient-to-br from-[#FFF5F7] to-[#F3ECFF] overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-8 z-10 py-20">
@@ -264,9 +256,9 @@ export default function GuestDashboard() {
               Elevate your glam ritual! Flawless, cute, and long-lasting cosmetics curated for your daily slay.
             </p>
             <div className="flex gap-4 pt-4">
-              <a href="#catalogue" className="bg-gradient-to-r from-rose-300 to-purple-200 text-rose-700 px-8 py-4 rounded-full text-xs font-bold uppercase tracking-wider hover:shadow-xl hover:shadow-rose-100 transition-all duration-300 inline-flex items-center gap-3 border border-rose-200/50">
-                Shop Collection <FaShoppingBag className="text-sm" />
-              </a>
+              <Link to="/register" className="bg-gradient-to-r from-rose-300 to-purple-200 text-rose-700 px-8 py-4 rounded-full text-xs font-bold uppercase tracking-wider hover:shadow-xl hover:shadow-rose-100 transition-all duration-300 inline-flex items-center gap-3 border border-rose-200/50">
+                Gabung & Belanja <FaShoppingBag className="text-sm" />
+              </Link>
             </div>
           </div>
           
@@ -330,7 +322,6 @@ export default function GuestDashboard() {
                     <span className="text-sm text-gray-300 line-through font-bold">Rp {product.originalPrice}</span>
                   </div>
                   
-                  {/* Interactive Stock Bar */}
                   <div className="mb-4">
                     <div className="flex justify-between text-[10px] font-bold text-rose-400 mb-1">
                       <span>🔥 {product.stock} left</span>
@@ -342,10 +333,10 @@ export default function GuestDashboard() {
                   </div>
 
                   <button 
-                    onClick={() => handleAddToBag(product.name)}
+                    onClick={handleAddToBag}
                     className="w-full bg-rose-200 hover:bg-rose-300 text-rose-700 py-3 rounded-xl font-bold text-xs uppercase tracking-widest transition-all shadow-md border border-rose-300/50 flex items-center justify-center gap-2"
                   >
-                    <FaShoppingBag /> Add to Bag
+                    <FaShoppingBag /> Login to Buy
                   </button>
                 </div>
               </div>
@@ -410,10 +401,10 @@ export default function GuestDashboard() {
 
                   <div className="absolute bottom-0 left-0 right-0 p-5 translate-y-20 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
                     <button 
-                      onClick={() => handleAddToBag(product.name)}
+                      onClick={handleAddToBag}
                       className="w-full bg-rose-200 hover:bg-rose-300 text-rose-700 py-4 rounded-2xl font-bold text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2 shadow-xl border border-rose-300/50"
                     >
-                      <FaShoppingBag /> Add to Bag
+                      <FaShoppingBag /> Login to Buy
                     </button>
                   </div>
                 </div>
@@ -454,7 +445,7 @@ export default function GuestDashboard() {
                       )}
                     </div>
                     <button 
-                      onClick={() => handleAddToBag(product.name)}
+                      onClick={handleAddToBag}
                       className="md:hidden bg-rose-200 text-rose-600 p-3 rounded-xl hover:bg-rose-300 transition-all shadow-sm"
                     >
                       <FaShoppingBag className="text-sm" />
@@ -656,21 +647,21 @@ export default function GuestDashboard() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-12 pb-16 border-b border-violet-200/50">
             <div className="col-span-2 md:col-span-1">
-              <h1 className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-rose-300 to-violet-300 tracking-tight mb-4">LUNEVE</h1>
+              <Link to="/" className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-rose-300 to-violet-300 tracking-tight mb-4 inline-block">LUNEVE</Link>
               <p className="text-sm font-medium leading-relaxed">Crafted with love for your daily glam routine. 💖</p>
             </div>
             <div>
               <h4 className="text-xs font-black uppercase tracking-widest text-rose-300 mb-6">Shop</h4>
               <ul className="space-y-3 text-sm font-medium">
-                <li><a href="#" className="hover:text-rose-400 transition-colors">Lips</a></li>
-                <li><a href="#" className="hover:text-rose-400 transition-colors">Eyes</a></li>
-                <li><a href="#" className="hover:text-rose-400 transition-colors">Face</a></li>
+                <li><a href="#catalogue" className="hover:text-rose-400 transition-colors">Lips</a></li>
+                <li><a href="#catalogue" className="hover:text-rose-400 transition-colors">Eyes</a></li>
+                <li><a href="#catalogue" className="hover:text-rose-400 transition-colors">Face</a></li>
               </ul>
             </div>
             <div>
               <h4 className="text-xs font-black uppercase tracking-widest text-rose-300 mb-6">About</h4>
               <ul className="space-y-3 text-sm font-medium">
-                <li><a href="#" className="hover:text-rose-400 transition-colors">Our Story</a></li>
+                <li><a href="#benefits" className="hover:text-rose-400 transition-colors">Our Story</a></li>
                 <li><a href="#" className="hover:text-rose-400 transition-colors">Sustainability</a></li>
                 <li><a href="#" className="hover:text-rose-400 transition-colors">Careers</a></li>
               </ul>

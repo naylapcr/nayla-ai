@@ -11,19 +11,35 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [successMsg, setSuccessMsg] = useState('');
+  const [redirectUrl, setRedirectUrl] = useState('/member'); // Default redirect
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
     setErrorMsg('');
+    setSuccessMsg('');
 
     try {
       const users = await authAPI.login(email, password);
 
       if (users && users.length > 0) {
+        const userData = users[0];
+        
+        // 1. Simpan data user (termasuk role) ke localStorage
+        localStorage.setItem('luneve_user', JSON.stringify(userData));
+
+        // 2. Tentukan rute berdasarkan role
+        const targetUrl = userData.role === 'admin' ? '/admin' : '/member';
+        setRedirectUrl(targetUrl);
+
+        // 3. Tampilkan pesan sukses
+        setSuccessMsg('Login berhasil! Mengalihkan... ✨');
+
+        // 4. Auto redirect
         setTimeout(() => {
-          navigate('/admin');
-        }, 500);
+          navigate(targetUrl);
+        }, 1500);
       } else {
         setErrorMsg('Email atau Password salah! Coba lagi yuk! 🥺');
       }
@@ -63,6 +79,19 @@ export default function Login() {
         {errorMsg && (
           <div className="mb-6 bg-red-50 text-red-400 px-5 py-3 rounded-2xl text-xs font-semibold text-center border border-red-100 animate-bounce">
             {errorMsg}
+          </div>
+        )}
+
+        {/* Success Message dengan Tombol Manual Redirect */}
+        {successMsg && (
+          <div className="mb-6 bg-emerald-50 text-emerald-500 px-5 py-4 rounded-2xl text-xs font-semibold text-center border border-emerald-100 animate-bounce space-y-3">
+            <p>{successMsg}</p>
+            <Link 
+              to={redirectUrl} 
+              className="inline-block bg-emerald-100 text-emerald-600 px-5 py-2 rounded-full font-bold hover:bg-emerald-200 transition-all"
+            >
+              Lanjutkan
+            </Link>
           </div>
         )}
 
@@ -126,7 +155,7 @@ export default function Login() {
             disabled={loading}
             className="w-full py-4 bg-gradient-to-r from-rose-300 to-violet-200 text-rose-700 rounded-2xl font-bold text-sm tracking-wide shadow-xl shadow-rose-100/50 hover:shadow-rose-200/50 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-wait border border-rose-200/50"
           >
-            {loading ? 'Tunggu sebentar ya... ✨' : 'Masuk ke Dashboard 💖'}
+            {loading ? 'Tunggu sebentar ya... ✨' : 'Masuk ke Akun 💖'}
           </button>
         </form>
 

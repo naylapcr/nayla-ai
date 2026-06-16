@@ -9,6 +9,7 @@ export default function Register() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [role, setRole] = useState('member'); // Default role adalah member
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -20,18 +21,16 @@ export default function Register() {
     setErrorMsg('');
     setSuccessMsg('');
 
-    const newUser = {
-      name: name,
-      email: email,
-      password: password
-    };
+    const newUser = { name, email, password, role }; // Sertakan role di payload
 
     try {
       await authAPI.register(newUser);
       setSuccessMsg('Yeay, akun berhasil dibuat! Pindah ke halaman login ya... ✨');
+      
+      // Auto redirect ke login dalam 1.5 detik
       setTimeout(() => {
-        navigate('/login'); 
-      }, 2000);
+        navigate('/login');
+      }, 1500);
     } catch (error) {
       console.error(error);
       if (error.response && error.response.data && error.response.data.message) {
@@ -74,9 +73,14 @@ export default function Register() {
             {errorMsg}
           </div>
         )}
+        
+        {/* Pesan sukses sekarang diberi tombol manual jika auto redirect gagal */}
         {successMsg && (
-          <div className="mb-6 bg-emerald-50 text-emerald-500 px-5 py-3 rounded-2xl text-xs font-semibold text-center border border-emerald-100 animate-bounce">
-            {successMsg}
+          <div className="mb-6 bg-emerald-50 text-emerald-500 px-5 py-4 rounded-2xl text-xs font-semibold text-center border border-emerald-100 animate-bounce space-y-3">
+            <p>{successMsg}</p>
+            <Link to="/login" className="inline-block bg-emerald-100 text-emerald-600 px-4 py-2 rounded-full font-bold hover:bg-emerald-200 transition-all">
+              Login Sekarang
+            </Link>
           </div>
         )}
 
@@ -136,6 +140,27 @@ export default function Register() {
                 className="absolute right-5 top-1/2 -translate-y-1/2 cursor-pointer transition-colors text-rose-300 hover:text-rose-500"
               >
                 {showPassword ? <FaRegEye /> : <FaRegEyeSlash />}
+              </button>
+            </div>
+          </div>
+
+          {/* PILIHAN ROLE CUTE */}
+          <div className="space-y-2">
+            <label className="text-xs font-semibold text-rose-400 ml-1">Daftar Sebagai</label>
+            <div className="grid grid-cols-2 gap-3">
+              <button 
+                type="button" 
+                onClick={() => setRole('member')}
+                className={`p-3 rounded-2xl border-2 text-xs font-bold transition-all flex flex-col items-center gap-1 ${role === 'member' ? 'border-rose-300 bg-rose-50 text-rose-600 shadow-md' : 'border-rose-50 text-gray-400 hover:border-rose-200'}`}
+              >
+                <span className="text-lg">🛍️</span> Member
+              </button>
+              <button 
+                type="button" 
+                onClick={() => setRole('admin')}
+                className={`p-3 rounded-2xl border-2 text-xs font-bold transition-all flex flex-col items-center gap-1 ${role === 'admin' ? 'border-violet-300 bg-violet-50 text-violet-600 shadow-md' : 'border-rose-50 text-gray-400 hover:border-rose-200'}`}
+              >
+                <span className="text-lg">💻</span> Admin
               </button>
             </div>
           </div>
