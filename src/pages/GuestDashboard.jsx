@@ -1,13 +1,46 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; // Ditambahkan useNavigate untuk redirect
 import { FaSearch, FaShoppingBag, FaStar, FaHeart, FaRegHeart, FaTruck, FaUndo, FaShieldAlt, FaWhatsapp, FaChevronDown, FaLeaf, FaHandSparkles, FaCertificate, FaThumbsUp, FaRegThumbsUp, FaCheckCircle } from "react-icons/fa";
+import { leadsAPI } from '../services/leadsAPI';
 
 export default function GuestDashboard() {
   const navigate = useNavigate(); // Hook untuk navigasi programatis
+  const [currentUser, setCurrentUser] = useState(null);
+  const [leadName, setLeadName] = useState("");
+  const [leadEmail, setLeadEmail] = useState("");
+  const [isLeadSubmitting, setIsLeadSubmitting] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [likedProducts, setLikedProducts] = useState({});
   const [selectedShades, setSelectedShades] = useState({});
   const [toast, setToast] = useState({ show: false, message: "" });
+
+  useEffect(() => {
+    const userStr = localStorage.getItem('luneve_user');
+    if (userStr) {
+      try {
+        setCurrentUser(JSON.parse(userStr));
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }, []);
+
+  const handleLeadSubmit = async (e) => {
+    e.preventDefault();
+    if (!leadName || !leadEmail) return;
+    setIsLeadSubmitting(true);
+    try {
+      await leadsAPI.create({ nama: leadName, email: leadEmail });
+      setToast({ show: true, message: "Terima kasih! Data prospek Anda berhasil disimpan. 🎉" });
+      setLeadName("");
+      setLeadEmail("");
+    } catch (err) {
+      console.error(err);
+      setToast({ show: true, message: "Gagal mengirim formulir. Silakan coba lagi! 🥺" });
+    } finally {
+      setIsLeadSubmitting(false);
+    }
+  };
   const [activeCategory, setActiveCategory] = useState("All");
   const [openFaq, setOpenFaq] = useState(null);
   
@@ -212,7 +245,8 @@ export default function GuestDashboard() {
             </Link>
             <div className="hidden lg:flex items-center gap-8 text-[11px] font-bold uppercase tracking-[0.15em] text-gray-400">
               <a href="#catalogue" className="hover:text-rose-400 transition-colors duration-300">Shop</a>
-              <a href="#benefits" className="hover:text-rose-400 transition-colors duration-300">About</a>
+              <a href="#crm-features" className="hover:text-rose-400 transition-colors duration-300">Features</a>
+              <a href="#tiering" className="hover:text-rose-400 transition-colors duration-300">Tiering</a>
               <a href="#reviews" className="hover:text-rose-400 transition-colors duration-300">Reviews</a>
               <a href="#faq" className="hover:text-rose-400 transition-colors duration-300">FAQ</a>
             </div>
@@ -231,34 +265,54 @@ export default function GuestDashboard() {
               />
             </div>
             
-            {/* TOMBOL LOGIN & REGISTER YANG SUDAH DIPASTIKAN BERFUNGSI */}
-            <Link to="/login" className="text-[11px] font-bold text-rose-400 hover:text-rose-600 transition-colors">
-              Login
-            </Link>
-            <Link to="/register" className="bg-gradient-to-r from-rose-300 to-purple-200 text-rose-700 px-5 py-2 rounded-full text-[11px] font-bold hover:shadow-md transition-all border border-rose-200/50">
-              Register ✨
-            </Link>
+            {/* SMART NAVBAR (PRD v2) */}
+            {currentUser ? (
+              <Link
+                to={currentUser.role === 'admin' ? '/admin' : '/member'}
+                className="bg-gradient-to-r from-rose-400 to-purple-400 text-white px-5 py-2 rounded-full text-[11px] font-bold hover:shadow-md transition-all shadow-sm"
+              >
+                Go to Dashboard 🚀
+              </Link>
+            ) : (
+              <>
+                <Link to="/login" className="text-[11px] font-bold text-rose-400 hover:text-rose-600 transition-colors">
+                  Login
+                </Link>
+                <Link to="/register" className="bg-gradient-to-r from-rose-300 to-purple-200 text-rose-700 px-5 py-2 rounded-full text-[11px] font-bold hover:shadow-md transition-all border border-rose-200/50">
+                  Register ✨
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </nav>
 
-      {/* HERO SECTION - CTA ke Register */}
+      {/* HERO SECTION - PRD v1 */}
       <section id="hero" className="relative min-h-[85vh] flex items-center bg-gradient-to-br from-[#FFF5F7] to-[#F3ECFF] overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-8 z-10 py-20">
             <span className="inline-flex items-center gap-2 bg-white text-rose-400 text-[11px] font-bold tracking-[0.2em] uppercase px-5 py-2 rounded-full border border-rose-100 shadow-sm">
-               ✨ New Season Drop
+               ✨ Platform CRM & Loyalitas Modern
             </span>
-            <h2 className="text-6xl md:text-8xl font-black text-gray-800 tracking-tight leading-[0.9]">
-              Get That <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-purple-300">Glow Up</span> 💖
+            <h2 className="text-5xl md:text-7xl font-black text-gray-800 tracking-tight leading-[1]">
+              Kelola Pelanggan & <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-purple-300">Tingkatkan Omset</span> 💖
             </h2>
-            <p className="text-gray-400 text-lg font-medium leading-relaxed max-w-md">
-              Elevate your glam ritual! Flawless, cute, and long-lasting cosmetics curated for your daily slay.
+            <p className="text-gray-400 text-base md:text-lg font-medium leading-relaxed max-w-md">
+              Solusi CRM terpadu dengan sistem tiering otomatis, poin reward eksklusif, dan analitik pesanan real-time untuk bisnis Anda.
             </p>
-            <div className="flex gap-4 pt-4">
-              <Link to="/register" className="bg-gradient-to-r from-rose-300 to-purple-200 text-rose-700 px-8 py-4 rounded-full text-xs font-bold uppercase tracking-wider hover:shadow-xl hover:shadow-rose-100 transition-all duration-300 inline-flex items-center gap-3 border border-rose-200/50">
-                Gabung & Belanja <FaShoppingBag className="text-sm" />
+            <div className="flex flex-wrap gap-4 pt-4">
+              <Link
+                to={currentUser ? (currentUser.role === 'admin' ? '/admin' : '/member') : '/register'}
+                className="bg-gradient-to-r from-rose-400 to-purple-400 text-white px-8 py-4 rounded-full text-xs font-bold uppercase tracking-wider hover:shadow-xl hover:shadow-rose-100 transition-all duration-300 inline-flex items-center gap-3 shadow-md"
+              >
+                Mulai Sekarang 🚀
               </Link>
+              <a
+                href="#crm-features"
+                className="bg-white text-rose-500 px-8 py-4 rounded-full text-xs font-bold uppercase tracking-wider hover:bg-rose-50 transition-all duration-300 inline-flex items-center gap-3 border border-rose-200/60 shadow-sm"
+              >
+                Pelajari Lebih Lanjut ✨
+              </a>
             </div>
           </div>
           
@@ -570,6 +624,131 @@ export default function GuestDashboard() {
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* CRM FEATURES SECTION (PRD v1) */}
+      <section id="crm-features" className="max-w-7xl mx-auto px-6 py-16">
+        <div className="text-center mb-12">
+          <span className="inline-flex items-center gap-2 bg-rose-50 text-rose-500 text-[11px] font-bold tracking-[0.2em] uppercase px-5 py-2 rounded-full border border-rose-100 shadow-sm mb-4">
+            Keunggulan Sistem CRM
+          </span>
+          <h3 className="text-3xl md:text-4xl font-black text-gray-800 tracking-tight">
+            Manajemen Pelanggan & Loyalitas Modern 💖
+          </h3>
+          <p className="text-gray-400 font-medium mt-2 text-sm max-w-xl mx-auto">
+            Platform terpadu untuk mengelola hubungan pelanggan, sistem poin reward, dan pelacakan pesanan secara real-time.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="bg-white p-8 rounded-3xl border border-rose-100 shadow-sm hover:shadow-md transition-all space-y-4">
+            <div className="w-14 h-14 rounded-2xl bg-rose-100 text-rose-500 flex items-center justify-center text-2xl font-bold">
+              👥
+            </div>
+            <h4 className="text-xl font-black text-gray-800">Manajemen Pelanggan</h4>
+            <p className="text-gray-500 text-sm leading-relaxed">
+              Pantau profil riwayat belanja member, segmentasi pelanggan, serta pengelompokan VIP secara mudah dan otomatis.
+            </p>
+          </div>
+          <div className="bg-white p-8 rounded-3xl border border-purple-100 shadow-sm hover:shadow-md transition-all space-y-4">
+            <div className="w-14 h-14 rounded-2xl bg-purple-100 text-purple-500 flex items-center justify-center text-2xl font-bold">
+              👑
+            </div>
+            <h4 className="text-xl font-black text-gray-800">Sistem Poin & Tiering</h4>
+            <p className="text-gray-500 text-sm leading-relaxed">
+              Tingkatkan loyalitas pelanggan melalui tingkatan member Bronze, Silver, Gold, hingga Platinum dengan diskon eksklusif.
+            </p>
+          </div>
+          <div className="bg-white p-8 rounded-3xl border border-rose-100 shadow-sm hover:shadow-md transition-all space-y-4">
+            <div className="w-14 h-14 rounded-2xl bg-rose-100 text-rose-500 flex items-center justify-center text-2xl font-bold">
+              📦
+            </div>
+            <h4 className="text-xl font-black text-gray-800">Pantau Pesanan Real-Time</h4>
+            <p className="text-gray-500 text-sm leading-relaxed">
+              Integrasi pesanan langsung dengan update status pemesanan, pengiriman, dan konfirmasi barang tiba secara live.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* MEMBER TIERING SECTION (PRD v2) */}
+      <section id="tiering" className="max-w-7xl mx-auto px-6 py-16">
+        <div className="text-center mb-12">
+          <span className="inline-flex items-center gap-2 bg-purple-50 text-purple-500 text-[11px] font-bold tracking-[0.2em] uppercase px-5 py-2 rounded-full border border-purple-100 shadow-sm mb-4">
+            Program Loyalitas
+          </span>
+          <h3 className="text-3xl md:text-4xl font-black text-gray-800 tracking-tight">
+            Tingkat Keanggotaan & Diskon Eksklusif ✨
+          </h3>
+          <p className="text-gray-400 font-medium mt-2 text-sm max-w-xl mx-auto">
+            Semakin banyak Anda berbelanja, semakin tinggi tier keanggotaan Anda dan semakin besar keuntungan yang didapatkan.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {[
+            { tier: "Bronze", discount: "5%", color: "from-amber-700/80 to-amber-900", border: "border-amber-700/30", bg: "bg-amber-50/50", desc: "Member baru bergabung" },
+            { tier: "Silver", discount: "10%", color: "from-slate-400 to-slate-600", border: "border-slate-400/30", bg: "bg-slate-50/50", desc: "Belanja akumulasi > Rp 500k" },
+            { tier: "Gold", discount: "15%", color: "from-amber-400 to-amber-600", border: "border-amber-400/30", bg: "bg-amber-50/80", desc: "Belanja akumulasi > Rp 2 Jt" },
+            { tier: "Platinum", discount: "20%", color: "from-purple-500 to-indigo-600", border: "border-purple-500/30", bg: "bg-purple-50/80", desc: "Belanja akumulasi > Rp 5 Jt" },
+          ].map((t, idx) => (
+            <div key={idx} className={`${t.bg} p-6 rounded-3xl border ${t.border} shadow-sm flex flex-col justify-between hover:-translate-y-1 transition-all duration-300`}>
+              <div>
+                <span className={`inline-block px-3 py-1 rounded-full text-[10px] font-black text-white bg-gradient-to-r ${t.color} uppercase tracking-wider mb-4 shadow-sm`}>
+                  {t.tier} Tier
+                </span>
+                <h4 className="text-3xl font-black text-gray-800 tracking-tight mb-1">{t.discount} <span className="text-sm font-bold text-gray-500">OFF</span></h4>
+                <p className="text-xs text-gray-500 font-medium mb-6">{t.desc}</p>
+              </div>
+              <ul className="space-y-2 text-xs text-gray-600 font-medium border-t border-gray-200/50 pt-4">
+                <li className="flex items-center gap-2"><FaCheckCircle className="text-rose-400 text-xs" /> Diskon semua produk</li>
+                <li className="flex items-center gap-2"><FaCheckCircle className="text-rose-400 text-xs" /> Akses rilis baru prioritas</li>
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* CONTACT / LEAD GENERATION FORM (PRD v3) */}
+      <section id="contact" className="max-w-4xl mx-auto px-6 py-16">
+        <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-rose-200/60 shadow-xl relative overflow-hidden">
+          <div className="text-center max-w-lg mx-auto mb-8">
+            <span className="inline-flex items-center gap-2 bg-rose-50 text-rose-500 text-[11px] font-bold tracking-[0.2em] uppercase px-5 py-2 rounded-full border border-rose-100 mb-3">
+              Hubungi Kami
+            </span>
+            <h3 className="text-3xl font-black text-gray-800 tracking-tight">Dapatkan Konsultasi & Penawaran CRM 💌</h3>
+            <p className="text-gray-400 text-sm font-medium mt-2">Tinggalkan nama dan email Anda. Tim konsultan Luneve Boutique akan segera menghubungi Anda!</p>
+          </div>
+          <form onSubmit={handleLeadSubmit} className="space-y-4 max-w-md mx-auto">
+            <div>
+              <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Nama Lengkap</label>
+              <input
+                type="text"
+                required
+                placeholder="Masukkan nama Anda..."
+                value={leadName}
+                onChange={(e) => setLeadName(e.target.value)}
+                className="w-full px-5 py-3 rounded-xl bg-rose-50/50 border border-rose-100 outline-none text-sm font-medium focus:ring-2 focus:ring-rose-200 focus:border-rose-300 transition-all text-gray-800 placeholder:text-rose-300"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Alamat Email</label>
+              <input
+                type="email"
+                required
+                placeholder="nama@email.com"
+                value={leadEmail}
+                onChange={(e) => setLeadEmail(e.target.value)}
+                className="w-full px-5 py-3 rounded-xl bg-rose-50/50 border border-rose-100 outline-none text-sm font-medium focus:ring-2 focus:ring-rose-200 focus:border-rose-300 transition-all text-gray-800 placeholder:text-rose-300"
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={isLeadSubmitting}
+              className="w-full bg-gradient-to-r from-rose-400 to-purple-400 hover:from-rose-500 hover:to-purple-500 text-white font-bold py-3.5 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 text-sm uppercase tracking-wider disabled:opacity-50 cursor-pointer"
+            >
+              {isLeadSubmitting ? "Mengirim..." : "Kirim Sekarang 🚀"}
+            </button>
+          </form>
         </div>
       </section>
 
