@@ -1,15 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaSearch, FaUserPlus, FaFilter, FaPen, FaTrashAlt, FaEnvelope, FaPhoneAlt } from 'react-icons/fa';
+import { customersAPI } from '../services/customersAPI';
 
 export default function CustomerManagement() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedTier, setSelectedTier] = useState('All');
+  const [customers, setCustomers] = useState([]);
 
-  const [customers] = useState([
-    { id: 'C001', name: 'Wonyoung Jang', email: 'wonyoung@luneve.com', phone: '+62 812-3456-7890', tier: 'VIP', totalOrders: 24, totalSpend: '8.450.000', joinDate: '12 Jan 2026', status: 'Active' },
-    { id: 'C002', name: 'Somi Enomoto', email: 'somi.en@luneve.com', phone: '+62 813-9876-5432', tier: 'VIP', totalOrders: 18, totalSpend: '6.120.000', joinDate: '05 Feb 2026', status: 'Active' },
-    { id: 'C003', name: 'Nayla Ramadhani', email: 'nayla@naylabeauty.id', phone: '+62 852-1122-3344', tier: 'Regular', totalOrders: 7, totalSpend: '1.850.000', joinDate: '20 Mar 2026', status: 'Active' },
-  ]);
+  const fetchCustomers = () => {
+    customersAPI.getAll().then(data => {
+      const mapped = data.map(c => {
+        const totalSpend = (c.orders || []).reduce((sum, o) => sum + (o.total || 0), 0);
+        return {
+          id: `C${c.id.slice(0, 3).toUpperCase()}`,
+          dbId: c.id,
+          name: c.name,
+          email: c.email,
+          phone: c.phone || '+62 812-3456-7890',
+          tier: c.tier || 'Bronze',
+          totalOrders: (c.orders || []).length,
+          totalSpend: totalSpend.toLocaleString('id-ID'),
+          joinDate: new Date(c.join_date || c.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }),
+          status: c.status || 'Active'
+        };
+      });
+      setCustomers(mapped);
+    }).catch(err => console.error("Error loading customers:", err));
+  };
+
+  useEffect(() => {
+    fetchCustomers();
+  }, []);
 
   const filteredCustomers = customers.filter(c => {
     const matchesSearch = c.name.toLowerCase().includes(searchTerm.toLowerCase()) || c.id.toLowerCase().includes(searchTerm.toLowerCase());
@@ -51,7 +72,7 @@ export default function CustomerManagement() {
             </div>
             
             <div className="flex bg-slate-50 p-1 rounded-2xl border border-slate-100">
-              {['All', 'VIP', 'Regular'].map((tier) => (
+              {['All', 'Bronze', 'Silver', 'Gold', 'Platinum'].map((tier) => (
                 <button
                   key={tier}
                   onClick={() => setSelectedTier(tier)}
@@ -89,7 +110,12 @@ export default function CustomerManagement() {
                       <div className="flex items-center gap-2 mt-1"><FaPhoneAlt size={10}/> {c.phone}</div>
                     </td>
                     <td className="py-5">
-                      <span className={`px-2.5 py-1 rounded-lg text-[10px] font-bold ${c.tier === 'VIP' ? 'bg-pink-50 text-pink-600' : 'bg-slate-100 text-slate-600'}`}>
+                      <span className={`px-2.5 py-1 rounded-lg text-[10px] font-bold ${
+                        c.tier === 'Platinum' ? 'bg-indigo-50 text-indigo-600' :
+                        c.tier === 'Gold' ? 'bg-amber-50 text-amber-600' :
+                        c.tier === 'Silver' ? 'bg-slate-100 text-slate-600' :
+                        'bg-orange-50 text-orange-600'
+                      }`}>
                         {c.tier}
                       </span>
                     </td>

@@ -1,28 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FaBox, FaMagnifyingGlass } from "react-icons/fa6";
+import { ordersAPI } from '../services/ordersAPI';
 
 export default function Orders() {
   const [activeTab, setActiveTab] = useState("All");
   const [globalFilter, setGlobalFilter] = useState("");
-
-
+  const [orders, setOrders] = useState([]);
   const searchInputRef = useRef(null);
 
-  // 2. Gunakan useEffect untuk menembak elemen dan mengaktifkan kursor (focus) saat halaman terbuka
+  const fetchOrders = () => {
+    ordersAPI.getAll().then(data => {
+      const mapped = data.map(o => {
+        const itemNames = o.order_items?.map(i => i.product_name) || [];
+        const firstItem = itemNames[0] || "No items";
+        const metaText = itemNames.length > 1 ? `+${itemNames.length - 1} other products` : "";
+        return {
+          id: `#LV-${o.id.slice(0, 4).toUpperCase()}`,
+          dbId: o.id,
+          user: o.users?.name || 'Guest',
+          item: firstItem + (metaText ? ` ${metaText}` : ""),
+          date: new Date(o.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }),
+          total: o.total.toLocaleString('id-ID'),
+          status: o.status
+        };
+      });
+      setOrders(mapped);
+    }).catch(err => console.error("Error loading orders:", err));
+  };
+
   useEffect(() => {
+    fetchOrders();
     if (searchInputRef.current) {
       searchInputRef.current.focus();
     }
-  }, []); // Array kosong [] memastikan fungsi ini hanya berjalan sekali di awal
+  }, []);
 
-  // Data customer ditambahkan lebih banyak agar terlihat ramai & bervariasi
-  const orders = [
-    { id: "#LV-9921", user: "Giselle A.", item: "Velvet Lip Tint", date: "2 Mins ago", total: "145.000", status: "Processing" },
-    { id: "#LV-9920", user: "Karina J.", item: "Glow Cushion + 2 Masks", date: "1 Hour ago", total: "260.000", status: "Shipped" },
-    { id: "#LV-9919", user: "Ningning V.", item: "Ethereal Palette", date: "3 Hours ago", total: "320.000", status: "Delivered" },
-  ];
+  const handleStatusChange = (orderId, newStatus) => {
+    ordersAPI.updateStatus(orderId, newStatus).then(() => {
+      fetchOrders();
+    }).catch(err => console.error("Error updating order status:", err));
+  };
 
-  // Logic filter pencarian global (ID & Nama) sekaligus tab status
   const filteredOrders = orders.filter(o => {
     const matchesTab = activeTab === "All" || o.status === activeTab;
     const matchesSearch = 
@@ -97,11 +115,21 @@ export default function Orders() {
                     <td className="py-5 text-slate-400">{order.date}</td>
                     <td className="py-5 font-bold text-slate-900">Rp{order.total}</td>
                     <td className="py-5 pr-2">
-                      <span className={`px-2.5 py-1 rounded-lg text-[10px] font-bold tracking-wide ${
-                        order.status === "Delivered" ? "bg-emerald-50 text-emerald-600" : "bg-amber-50 text-amber-600"
-                      }`}>
-                        {order.status}
-                      </span>
+                      <select
+                        value={order.status}
+                        onChange={(e) => handleStatusChange(order.dbId, e.target.value)}
+                        className={`px-2.5 py-1 rounded-lg text-[10px] font-bold tracking-wide border-0 outline-none cursor-pointer ${
+                          order.status === "Delivered" 
+                            ? "bg-emerald-50 text-emerald-600" 
+                            : order.status === "Shipped" 
+                              ? "bg-indigo-50 text-indigo-600" 
+                              : "bg-amber-50 text-amber-600"
+                        }`}
+                      >
+                        <option value="Processing" className="bg-white text-slate-800">Processing</option>
+                        <option value="Shipped" className="bg-white text-slate-800">Shipped</option>
+                        <option value="Delivered" className="bg-white text-slate-800">Delivered</option>
+                      </select>
                     </td>
                   </tr>
                 ))}
@@ -118,7 +146,7 @@ export default function Orders() {
             </div>
             <div>
               <h5 className="text-lg font-black text-white tracking-tight">Ready to pack?</h5>
-              <p className="text-xs text-slate-400 font-medium">There are 12 orders waiting for your action.</p>
+              <p className="text-xs text-slate-400 font-medium">There are {orders.filter(o => o.status === 'Processing').length} orders waiting for your action.</p>
             </div>
           </div>
           <button className="bg-white text-slate-900 px-8 py-3 rounded-2xl text-[11px] font-black uppercase tracking-widest hover:bg-pink-50 transition-all">

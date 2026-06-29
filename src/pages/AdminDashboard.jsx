@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   FaChevronDown,
   FaRegBell,
@@ -8,7 +9,10 @@ import {
   FaUser,
   FaGear,
   FaRightFromBracket,
+  FaClock,
+  FaCalendarDays,
 } from "react-icons/fa6";
+import { FaCalendarAlt } from "react-icons/fa";
 
 import CategoryFilter from "../components/dashboard/CategoryFilter";
 import StatCard from "../components/dashboard/StatCard";
@@ -18,6 +22,8 @@ import SalesOverview from "../components/dashboard/SalesOverview";
 import TopProductItem from "../components/dashboard/TopProductItem";
 // Tambah import ini di bagian atas
 import DateRangePicker from "../components/dashboard/DateRangePicker";
+import { dashboardAPI } from "../services/dashboardAPI";
+import { ordersAPI } from "../services/ordersAPI";
 
 
 export default function AdminDashboard() {
@@ -50,48 +56,48 @@ export default function AdminDashboard() {
   for (let i = 0; i < firstDayOfMonth; i++) calendarCells.push(null);
   for (let i = 1; i <= daysInMonth; i++) calendarCells.push(i);
 
-  const stats = [
-    { label: "Total Sales Items", val: "4,825 pcs", trend: "+12.4%", isUp: true },
-    { label: "Cosmetic Revenue", val: "IDR 142.8M", trend: "+8.2%", isUp: true },
-    { label: "Active Customers", val: "1,840 Users", trend: "+5.1%", isUp: true },
-    { label: "Product Returns", val: "12 pcs", trend: "-2.4%", isUp: false },
-  ];
+  const navigate = useNavigate();
+  const [stats, setStats] = useState([
+    { label: "Total Sales Items", val: "0 pcs", trend: "+12.4%", isUp: true },
+    { label: "Cosmetic Revenue", val: "IDR 0", trend: "+8.2%", isUp: true },
+    { label: "Active Customers", val: "0 Users", trend: "+5.1%", isUp: true },
+    { label: "Product Returns", val: "0 pcs", trend: "-2.4%", isUp: false },
+  ]);
 
-  const orders = [
-    {
-      id: "#11852",
-      product: "Black Solid T-Shirt",
-      icon: "👕",
-      meta: "+2 other products",
-      customer: "Nowshad Khan",
-      amount: "$300.00",
-      status: "In Progress",
-      date: "31 May 2026",
-      payment: "Credit Card",
-    },
-    {
-      id: "#11878",
-      product: "Men's Sneakers",
-      icon: "👟",
-      meta: "+2 other products",
-      customer: "Khalid Rahman",
-      amount: "$500.00",
-      status: "In Progress",
-      date: "30 May 2026",
-      payment: "PayPal",
-    },
-    {
-      id: "#11868",
-      product: "Men's Jogger",
-      icon: "🩳",
-      meta: "+2 other products",
-      customer: "Ashraf Ali",
-      amount: "$200.00",
-      status: "Pending",
-      date: "28 May 2026",
-      payment: "Bank Transfer",
-    },
-  ];
+  const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+    // Fetch statistics
+    dashboardAPI.getSummary().then(data => {
+      setStats([
+        { label: "Total Sales Items", val: `${data.total_items} pcs`, trend: "+12.4%", isUp: true },
+        { label: "Cosmetic Revenue", val: `IDR ${(data.total_revenue || 0).toLocaleString('id-ID')}`, trend: "+8.2%", isUp: true },
+        { label: "Active Customers", val: `${data.active_customers} Users`, trend: "+5.1%", isUp: true },
+        { label: "Product Returns", val: `${data.returns} pcs`, trend: "-2.4%", isUp: false },
+      ]);
+    }).catch(err => console.error("Error loading dashboard stats", err));
+
+    // Fetch recent orders
+    ordersAPI.getAll().then(data => {
+      const mapped = data.slice(0, 5).map(o => {
+        const itemNames = o.order_items?.map(i => i.product_name) || [];
+        const firstItem = itemNames[0] || "No items";
+        const metaText = itemNames.length > 1 ? `+${itemNames.length - 1} other products` : "";
+        return {
+          id: `#LV-${o.id.slice(0, 4).toUpperCase()}`,
+          product: firstItem,
+          icon: firstItem.toLowerCase().includes("lip") ? "💄" : (firstItem.toLowerCase().includes("cushion") ? "🎨" : "👁️"),
+          meta: metaText,
+          customer: o.users?.name || 'Guest',
+          amount: `Rp ${o.total.toLocaleString('id-ID')}`,
+          status: o.status,
+          date: new Date(o.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }),
+          payment: 'E-Wallet',
+        };
+      });
+      setOrders(mapped);
+    }).catch(err => console.error("Error loading dashboard orders", err));
+  }, []);
 
   const topProducts = [
     { name: "Luneve Lip Glow Serum", earnings: 42000000 },
@@ -167,7 +173,13 @@ export default function AdminDashboard() {
                     </button>
                     <div className="border-t border-slate-50 my-1"></div>
                     {/* Ganti bagian button Log Out menjadi seperti ini */}
-                    <button className="w-full flex items-center gap-2 px-4 py-2 text-xs text-rose-600 hover:bg-rose-50 text-left font-bold">
+                    <button
+                      onClick={() => {
+                        localStorage.removeItem('luneve_user');
+                        navigate('/login');
+                      }}
+                      className="w-full flex items-center gap-2 px-4 py-2 text-xs text-rose-600 hover:bg-rose-50 text-left font-bold"
+                    >
                       <FaRightFromBracket size={12} /> Log Out
                     </button>
                   </div>

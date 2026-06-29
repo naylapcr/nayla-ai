@@ -35,7 +35,11 @@ function App() {
           <Route path="/member" element={<MemberDashboard />} />
 
           {/* HALAMAN ADMIN */}
-          <Route path="/admin" element={<MainLayout />}>
+          <Route path="/admin" element={
+            <ProtectedRoute>
+              <MainLayout />
+            </ProtectedRoute>
+          }>
             <Route index element={<Dashboard />} />
             <Route path="products" element={<Products />} />
             <Route path="orders" element={<Orders />} />

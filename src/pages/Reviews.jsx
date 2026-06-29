@@ -1,15 +1,45 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaStar, FaMagnifyingGlass, FaEye, FaTrashCan, FaCheck } from "react-icons/fa6";
+import { reviewsAPI } from '../services/reviewsAPI';
 
 export default function Reviews() {
   const [activeTooltipId, setActiveTooltipId] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [reviews, setReviews] = useState([]);
 
-  const reviews = [
-    { id: "#REV-001", user: "Minji K.", date: "14 June 2026", text: "Luneve cushion is literally a second skin! 💖", rate: 5, product: "Luneve Cushion Foundation", status: "Approved" },
-    { id: "#REV-002", user: "Hanni P.", date: "13 June 2026", text: "The lip tint color is so pretty but shipping took 3 days.", rate: 4, product: "Velvet Lip Tint #04", status: "Pending" },
-    { id: "#REV-003", user: "Danielle M.", date: "12 June 2026", text: "Best skincare ever. My skin is glowing!", rate: 5, product: "Glow Serum Niacinamide", status: "Approved" },
-  ];
+  const fetchReviews = () => {
+    reviewsAPI.getAll().then(data => {
+      const mapped = data.map(r => ({
+        id: `#REV-${r.id.slice(0, 3).toUpperCase()}`,
+        dbId: r.id,
+        user: r.users?.name || 'Anonymous',
+        date: new Date(r.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }),
+        text: r.text,
+        rate: r.rating,
+        product: r.products?.title || 'Unknown Product',
+        status: r.status
+      }));
+      setReviews(mapped);
+    }).catch(err => console.error("Error loading reviews:", err));
+  };
+
+  useEffect(() => {
+    fetchReviews();
+  }, []);
+
+  const handleApprove = (reviewId) => {
+    reviewsAPI.updateStatus(reviewId, 'Approved').then(() => {
+      fetchReviews();
+    }).catch(err => console.error("Error approving review:", err));
+  };
+
+  const handleDelete = (reviewId) => {
+    if (window.confirm("Are you sure you want to delete this review?")) {
+      reviewsAPI.delete(reviewId).then(() => {
+        fetchReviews();
+      }).catch(err => console.error("Error deleting review:", err));
+    }
+  };
 
   const filteredReviews = reviews.filter(r => 
     r.user.toLowerCase().includes(searchQuery.toLowerCase()) || 
@@ -120,7 +150,10 @@ export default function Reviews() {
                     <td className="py-5 pr-2 text-right relative">
                       <div className="flex items-center justify-end gap-1.5">
                         {review.status === "Pending" && (
-                          <button className="p-2 text-emerald-500 hover:bg-emerald-50 rounded-xl transition-all">
+                          <button 
+                            onClick={() => handleApprove(review.dbId)}
+                            className="p-2 text-emerald-500 hover:bg-emerald-50 rounded-xl transition-all"
+                          >
                             <FaCheck size={12} />
                           </button>
                         )}
@@ -142,7 +175,10 @@ export default function Reviews() {
                           )}
                         </div>
 
-                        <button className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-all">
+                        <button 
+                          onClick={() => handleDelete(review.dbId)}
+                          className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-all"
+                        >
                           <FaTrashCan size={12} />
                         </button>
                       </div>

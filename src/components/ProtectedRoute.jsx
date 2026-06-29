@@ -9,5 +9,10 @@ export default function ProtectedRoute({ children }) {
     return <Navigate to="/login" replace />;
   }
 
+  // Jika user bukan admin, lempar ke halaman member
+  if (user.role !== 'admin') {
+    return <Navigate to="/member" replace />;
+  }
+
   return children;
 }
