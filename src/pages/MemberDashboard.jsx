@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { FaSearch, FaShoppingBag, FaStar, FaHeart, FaRegHeart, FaTimes, FaTrash, FaWhatsapp, FaSignOutAlt, FaCrown, FaGem, FaChevronRight } from "react-icons/fa";
+import { FaSearch, FaShoppingBag, FaStar, FaHeart, FaRegHeart, FaTimes, FaTrash, FaWhatsapp, FaSignOutAlt, FaCrown, FaGem, FaChevronRight, FaTruck, FaBox, FaSyncAlt, FaCheckCircle, FaClock } from "react-icons/fa";
 
 export default function MemberDashboard() {
   const navigate = useNavigate();
@@ -11,6 +11,50 @@ export default function MemberDashboard() {
   const [likedProducts, setLikedProducts] = useState({});
   const [toast, setToast] = useState({ show: false, message: "" });
   const [selectedProduct, setSelectedProduct] = useState(null); // State untuk modal detail
+  const [isRefreshingOrders, setIsRefreshingOrders] = useState(false);
+  const [liveOrders, setLiveOrders] = useState([
+    {
+      id: "LNV-8921",
+      date: "29 Juni 2026",
+      items: "Velvet Matte Lip (2x), Dewy Tinted Gloss (1x)",
+      total: 515000,
+      status: "In Transit",
+      statusText: "🚚 Sedang Dikirim",
+      courier: "JNE Express (JP88291029)",
+      est: "Besok, 14:00 WIB",
+      progress: 75
+    },
+    {
+      id: "LNV-9012",
+      date: "29 Juni 2026",
+      items: "Silk Glow Cushion (1x)",
+      total: 310000,
+      status: "Processing",
+      statusText: "⚙️ Diproses Gudang",
+      courier: "J&T Express",
+      est: "2 Juli 2026",
+      progress: 35
+    },
+    {
+      id: "LNV-8840",
+      date: "25 Juni 2026",
+      items: "Dewy Tinted Gloss (2x)",
+      total: 290000,
+      status: "Delivered",
+      statusText: "✅ Pesanan Tiba",
+      courier: "GoSend Instant",
+      est: "Diterima Member",
+      progress: 100
+    }
+  ]);
+
+  const handleRefreshLiveOrders = () => {
+    setIsRefreshingOrders(true);
+    setTimeout(() => {
+      setIsRefreshingOrders(false);
+      setToast({ show: true, message: "Status pesanan real-time diperbarui! 📡✨" });
+    }, 800);
+  };
 
   useEffect(() => {
     const userData = localStorage.getItem('luneve_user');
@@ -153,6 +197,61 @@ export default function MemberDashboard() {
             <p className="text-xs text-gray-500 font-medium">
               {nextTier === 'Diamond' ? "You've reached the highest tier! 💎" : `Earn ${nextTier === 'Gold' ? 2500 - currentPoints : 5000 - currentPoints} more points to reach ${nextTier === 'Gold' ? 'Gold 👑' : 'Diamond 💎'}`}
             </p>
+          </div>
+        </div>
+
+        {/* PANTAU PESANAN REAL-TIME SECTION (PRD v1 Enhancement) */}
+        <div className="bg-white p-8 rounded-[2.5rem] border border-rose-100 shadow-sm space-y-6">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-rose-50 pb-6">
+            <div>
+              <span className="inline-flex items-center gap-1.5 bg-rose-50 text-rose-500 text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-full mb-2 border border-rose-100">
+                <FaTruck className="text-xs" /> Live Order Tracking
+              </span>
+              <h3 className="text-2xl font-black text-gray-800 tracking-tight">Pantau Pesanan Real-Time 📦</h3>
+            </div>
+            <button
+              onClick={handleRefreshLiveOrders}
+              disabled={isRefreshingOrders}
+              className="bg-rose-50 hover:bg-rose-100 text-rose-600 px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all border border-rose-200/50 flex items-center gap-2 cursor-pointer disabled:opacity-50"
+            >
+              <FaSyncAlt className={`text-xs ${isRefreshingOrders ? 'animate-spin' : ''}`} />
+              {isRefreshingOrders ? "Memuat..." : "Refresh Live"}
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {liveOrders.map((ord) => (
+              <div key={ord.id} className="bg-gradient-to-br from-[#FFF8FA] to-white p-6 rounded-3xl border border-rose-100/80 shadow-sm flex flex-col justify-between space-y-4 hover:shadow-md transition-all">
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs font-black text-rose-600 bg-rose-100/60 px-3 py-1 rounded-full">{ord.id}</span>
+                    <span className="text-[11px] font-bold text-gray-400 flex items-center gap-1"><FaClock className="text-xs text-rose-300" /> {ord.date}</span>
+                  </div>
+                  <h4 className="text-sm font-black text-gray-800 line-clamp-1">{ord.items}</h4>
+                  <p className="text-xs font-bold text-gray-500">Total: <span className="text-rose-600 font-black">Rp {ord.total.toLocaleString('id-ID')}</span></p>
+                </div>
+
+                <div className="space-y-3 pt-3 border-t border-rose-50">
+                  <div className="flex justify-between items-center text-xs">
+                    <span className="font-black text-gray-700 flex items-center gap-1.5">
+                      {ord.status === 'Delivered' ? <FaCheckCircle className="text-emerald-500 text-sm" /> : <FaTruck className="text-rose-500 text-sm animate-pulse" />}
+                      {ord.statusText}
+                    </span>
+                    <span className="text-[10px] font-bold text-gray-400">{ord.progress}%</span>
+                  </div>
+                  <div className="w-full bg-rose-100/60 rounded-full h-2 overflow-hidden">
+                    <div
+                      className={`h-full rounded-full transition-all duration-1000 ${ord.status === 'Delivered' ? 'bg-emerald-500' : 'bg-gradient-to-r from-rose-400 to-purple-400'}`}
+                      style={{ width: `${ord.progress}%` }}
+                    ></div>
+                  </div>
+                  <div className="flex justify-between items-center text-[11px] text-gray-500 pt-1 font-medium">
+                    <span>Kurir: <strong className="text-gray-700">{ord.courier}</strong></span>
+                    <span className="text-rose-500 font-bold">{ord.est}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
