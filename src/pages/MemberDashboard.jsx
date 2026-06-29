@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { FaSearch, FaShoppingBag, FaStar, FaHeart, FaRegHeart, FaTimes, FaTrash, FaWhatsapp, FaSignOutAlt, FaCrown, FaGem, FaChevronRight } from "react-icons/fa";
 
 export default function MemberDashboard() {
@@ -14,13 +14,21 @@ export default function MemberDashboard() {
 
   useEffect(() => {
     const userData = localStorage.getItem('luneve_user');
-    if (!userData) {
+    if (!userData || userData === 'null' || userData === 'undefined' || userData === '{}') {
       navigate('/login');
     } else {
-      const parsedUser = JSON.parse(userData);
-      if (!parsedUser.points) parsedUser.points = 1250;
-      if (!parsedUser.tier) parsedUser.tier = 'Rose';
-      setUser(parsedUser);
+      try {
+        const parsedUser = JSON.parse(userData);
+        if (!parsedUser || (!parsedUser.id && !parsedUser.email)) {
+          navigate('/login');
+          return;
+        }
+        if (!parsedUser.points) parsedUser.points = 1250;
+        if (!parsedUser.tier) parsedUser.tier = 'Rose';
+        setUser(parsedUser);
+      } catch (e) {
+        navigate('/login');
+      }
     }
   }, [navigate]);
 
@@ -89,7 +97,12 @@ export default function MemberDashboard() {
       {/* NAVBAR MEMBER */}
       <nav className="bg-white/80 border-b border-rose-50 sticky top-0 z-50 backdrop-blur-lg">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-purple-300 tracking-tight">LUNEVE</h1>
+          <div className="flex items-center gap-4">
+            <Link to="/" className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-purple-300 tracking-tight hover:opacity-80 transition-opacity">LUNEVE</Link>
+            <Link to="/" className="bg-rose-50 hover:bg-rose-100 text-rose-600 px-3.5 py-1.5 rounded-full text-[11px] font-bold transition-all border border-rose-200/50 flex items-center gap-1.5 shadow-sm">
+              🏠 Ke Landing Page
+            </Link>
+          </div>
           <div className="hidden md:block relative w-64 group">
             <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-rose-300 text-xs" />
             <input type="text" placeholder="Cari produk..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="w-full pl-10 pr-6 py-2 rounded-full bg-rose-50/50 border border-rose-100 outline-none text-xs font-medium focus:ring-2 focus:ring-rose-100 transition-all" />

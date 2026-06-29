@@ -16,12 +16,20 @@ export default function GuestDashboard() {
 
   useEffect(() => {
     const userStr = localStorage.getItem('luneve_user');
-    if (userStr) {
+    if (userStr && userStr !== 'null' && userStr !== 'undefined' && userStr !== '{}') {
       try {
-        setCurrentUser(JSON.parse(userStr));
+        const parsed = JSON.parse(userStr);
+        if (parsed && (parsed.id || parsed.email) && parsed.role) {
+          setCurrentUser(parsed);
+        } else {
+          setCurrentUser(null);
+        }
       } catch (e) {
         console.error(e);
+        setCurrentUser(null);
       }
+    } else {
+      setCurrentUser(null);
     }
   }, []);
 
@@ -231,9 +239,13 @@ export default function GuestDashboard() {
         <FaWhatsapp className="text-2xl" />
       </a>
 
-      {/* PROMO BANNER - Pakai Link Register */}
+      {/* PROMO BANNER */}
       <div className="bg-gradient-to-r from-rose-200 to-purple-200 text-rose-800 text-center py-2.5 text-[11px] font-bold tracking-wider uppercase">
-        Free Shipping on Orders Over Rp 500K 🛍️ | <Link to="/register" className="underline cursor-pointer hover:text-rose-600 transition-colors">Gabung Sekarang</Link>
+        Free Shipping on Orders Over Rp 500K 🛍️ | {currentUser && currentUser.role ? (
+          <Link to={currentUser.role === 'admin' ? '/admin' : '/member'} className="underline cursor-pointer hover:text-rose-600 transition-colors">Buka Dashboard Anda</Link>
+        ) : (
+          <Link to="/register" className="underline cursor-pointer hover:text-rose-600 transition-colors">Gabung Sekarang</Link>
+        )}
       </div>
 
       {/* NAVBAR - Diperbaiki Pakai Link Login & Register */}
@@ -249,6 +261,11 @@ export default function GuestDashboard() {
               <a href="#tiering" className="hover:text-rose-400 transition-colors duration-300">Tiering</a>
               <a href="#reviews" className="hover:text-rose-400 transition-colors duration-300">Reviews</a>
               <a href="#faq" className="hover:text-rose-400 transition-colors duration-300">FAQ</a>
+              {currentUser && currentUser.role && (
+                <Link to={currentUser.role === 'admin' ? '/admin' : '/member'} className="text-rose-500 font-black hover:text-rose-600 transition-colors duration-300 underline">
+                  {currentUser.role === 'admin' ? 'Admin Panel ✨' : 'Member Area ✨'}
+                </Link>
+              )}
             </div>
           </div>
           
@@ -266,12 +283,12 @@ export default function GuestDashboard() {
             </div>
             
             {/* SMART NAVBAR (PRD v2) */}
-            {currentUser ? (
+            {currentUser && currentUser.role ? (
               <Link
                 to={currentUser.role === 'admin' ? '/admin' : '/member'}
-                className="bg-gradient-to-r from-rose-400 to-purple-400 text-white px-5 py-2 rounded-full text-[11px] font-bold hover:shadow-md transition-all shadow-sm"
+                className="bg-gradient-to-r from-rose-400 to-purple-400 text-white px-5 py-2 rounded-full text-[11px] font-bold hover:shadow-md transition-all shadow-sm flex items-center gap-1.5"
               >
-                Go to Dashboard 🚀
+                {currentUser.role === 'admin' ? 'Halaman Admin 🛡️' : 'Halaman Member 🎀'}
               </Link>
             ) : (
               <>
@@ -302,10 +319,10 @@ export default function GuestDashboard() {
             </p>
             <div className="flex flex-wrap gap-4 pt-4">
               <Link
-                to={currentUser ? (currentUser.role === 'admin' ? '/admin' : '/member') : '/register'}
+                to={currentUser && currentUser.role ? (currentUser.role === 'admin' ? '/admin' : '/member') : '/register'}
                 className="bg-gradient-to-r from-rose-400 to-purple-400 text-white px-8 py-4 rounded-full text-xs font-bold uppercase tracking-wider hover:shadow-xl hover:shadow-rose-100 transition-all duration-300 inline-flex items-center gap-3 shadow-md"
               >
-                Mulai Sekarang 🚀
+                {currentUser && currentUser.role ? (currentUser.role === 'admin' ? 'Ke Halaman Admin 🛡️' : 'Ke Halaman Member 🎀') : 'Mulai Sekarang 🚀'}
               </Link>
               <a
                 href="#crm-features"
@@ -388,9 +405,9 @@ export default function GuestDashboard() {
 
                   <button 
                     onClick={handleAddToBag}
-                    className="w-full bg-rose-200 hover:bg-rose-300 text-rose-700 py-3 rounded-xl font-bold text-xs uppercase tracking-widest transition-all shadow-md border border-rose-300/50 flex items-center justify-center gap-2"
+                    className="w-full bg-rose-200 hover:bg-rose-300 text-rose-700 py-3 rounded-xl font-bold text-xs uppercase tracking-widest transition-all shadow-md border border-rose-300/50 flex items-center justify-center gap-2 cursor-pointer"
                   >
-                    <FaShoppingBag /> Login to Buy
+                    <FaShoppingBag /> {currentUser && currentUser.role ? "Masukkan Keranjang 🛍️" : "Login to Buy"}
                   </button>
                 </div>
               </div>
@@ -456,9 +473,9 @@ export default function GuestDashboard() {
                   <div className="absolute bottom-0 left-0 right-0 p-5 translate-y-20 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
                     <button 
                       onClick={handleAddToBag}
-                      className="w-full bg-rose-200 hover:bg-rose-300 text-rose-700 py-4 rounded-2xl font-bold text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2 shadow-xl border border-rose-300/50"
+                      className="w-full bg-rose-200 hover:bg-rose-300 text-rose-700 py-4 rounded-2xl font-bold text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2 shadow-xl border border-rose-300/50 cursor-pointer"
                     >
-                      <FaShoppingBag /> Login to Buy
+                      <FaShoppingBag /> {currentUser && currentUser.role ? "Masukkan Keranjang 🛍️" : "Login to Buy"}
                     </button>
                   </div>
                 </div>
