@@ -5,13 +5,32 @@ export default function Orders() {
   const [activeTab, setActiveTab] = useState("All");
   const [globalFilter, setGlobalFilter] = useState("");
 
+
+  const searchInputRef = useRef(null);
+
+  // 2. Gunakan useEffect untuk menembak elemen dan mengaktifkan kursor (focus) saat halaman terbuka
+  useEffect(() => {
+    if (searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, []); // Array kosong [] memastikan fungsi ini hanya berjalan sekali di awal
+
+  // Data customer ditambahkan lebih banyak agar terlihat ramai & bervariasi
   const orders = [
     { id: "#LV-9921", user: "Giselle A.", item: "Velvet Lip Tint", date: "2 Mins ago", total: "145.000", status: "Processing" },
     { id: "#LV-9920", user: "Karina J.", item: "Glow Cushion + 2 Masks", date: "1 Hour ago", total: "260.000", status: "Shipped" },
     { id: "#LV-9919", user: "Ningning V.", item: "Ethereal Palette", date: "3 Hours ago", total: "320.000", status: "Delivered" },
   ];
 
-  const filteredOrders = orders.filter(o => activeTab === "All" || o.status === activeTab);
+  // Logic filter pencarian global (ID & Nama) sekaligus tab status
+  const filteredOrders = orders.filter(o => {
+    const matchesTab = activeTab === "All" || o.status === activeTab;
+    const matchesSearch = 
+      o.user.toLowerCase().includes(globalFilter.toLowerCase()) || 
+      o.id.toLowerCase().includes(globalFilter.toLowerCase()) ||
+      o.item.toLowerCase().includes(globalFilter.toLowerCase());
+    return matchesTab && matchesSearch;
+  });
 
   return (
     <div className="flex bg-[#F8FAFC] min-h-screen font-sans w-full">
@@ -107,6 +126,7 @@ export default function Orders() {
           </button>
         </div>
       </div>
+
     </div>
   );
 }
