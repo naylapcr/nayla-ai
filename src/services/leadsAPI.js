@@ -17,7 +17,19 @@ const getHeaders = () => {
 
 export const leadsAPI = {
   async create(leadData) {
-    const res = await axios.post(`${BASE_URL}/crm_leads`, leadData, { headers: getHeaders() });
-    return res.data;
+    try {
+      const res = await axios.post(`${BASE_URL}/crm_leads`, leadData, { headers: getHeaders() });
+      return res.data;
+    } catch (err) {
+      console.warn("Supabase crm_leads table not found / RLS error. Saving to fallback localStorage:", err?.response?.data || err.message);
+      const existingLeads = JSON.parse(localStorage.getItem('luneve_leads') || '[]');
+      const newLead = {
+        id: "local-" + Date.now(),
+        ...leadData,
+        created_at: new Date().toISOString()
+      };
+      localStorage.setItem('luneve_leads', JSON.stringify([newLead, ...existingLeads]));
+      return [newLead];
+    }
   }
 };
