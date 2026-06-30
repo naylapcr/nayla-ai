@@ -309,26 +309,26 @@ export default function GuestDashboard() {
         <div className="max-w-7xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-8 z-10 py-20">
             <span className="inline-flex items-center gap-2 bg-white text-rose-400 text-[11px] font-bold tracking-[0.2em] uppercase px-5 py-2 rounded-full border border-rose-100 shadow-sm">
-               ✨ Platform CRM & Loyalitas Modern
+               ✨ Butik Kosmetik & Skincare Eksklusif
             </span>
             <h2 className="text-5xl md:text-7xl font-black text-gray-800 tracking-tight leading-[1]">
-              Kelola Pelanggan & <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-purple-300">Tingkatkan Omset</span> 💖
+              Pancarkan Pesona & <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-purple-300">Kilau Alami Anda</span> 💖
             </h2>
             <p className="text-gray-400 text-base md:text-lg font-medium leading-relaxed max-w-md">
-              Solusi CRM terpadu dengan sistem tiering otomatis, poin reward eksklusif, dan analitik pesanan real-time untuk bisnis Anda.
+              Jelajahi koleksi kosmetik bernutrisi botani, nikmati keuntungan tier member eksklusif, dan dapatkan penawaran spesial di setiap pembelian Anda.
             </p>
             <div className="flex flex-wrap gap-4 pt-4">
               <Link
                 to={currentUser && currentUser.role ? (currentUser.role === 'admin' ? '/admin' : '/member') : '/register'}
                 className="bg-gradient-to-r from-rose-400 to-purple-400 text-white px-8 py-4 rounded-full text-xs font-bold uppercase tracking-wider hover:shadow-xl hover:shadow-rose-100 transition-all duration-300 inline-flex items-center gap-3 shadow-md"
               >
-                {currentUser && currentUser.role ? (currentUser.role === 'admin' ? 'Ke Halaman Admin 🛡️' : 'Ke Halaman Member 🎀') : 'Mulai Sekarang 🚀'}
+                {currentUser && currentUser.role ? (currentUser.role === 'admin' ? 'Ke Halaman Admin 🛡️' : 'Ke Halaman Member 🎀') : 'Belanja Sekarang 🛍️'}
               </Link>
               <a
-                href="#crm-features"
+                href="#catalogue"
                 className="bg-white text-rose-500 px-8 py-4 rounded-full text-xs font-bold uppercase tracking-wider hover:bg-rose-50 transition-all duration-300 inline-flex items-center gap-3 border border-rose-200/60 shadow-sm"
               >
-                Pelajari Lebih Lanjut ✨
+                Lihat Koleksi ✨
               </a>
             </div>
           </div>

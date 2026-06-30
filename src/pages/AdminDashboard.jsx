@@ -10,9 +10,7 @@ import {
   FaGear,
   FaRightFromBracket,
   FaClock,
-  FaCalendarDays,
 } from "react-icons/fa6";
-import { FaCalendarAlt } from "react-icons/fa";
 
 import CategoryFilter from "../components/dashboard/CategoryFilter";
 import StatCard from "../components/dashboard/StatCard";
@@ -34,10 +32,6 @@ export default function AdminDashboard() {
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const [activeTooltipId, setActiveTooltipId] = useState(null);
 
-  // --- STATE CALENDAR ---
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-
   // --- STATE LIVE TIME (Mengisi space kosong di bawah search agar fungsional) ---
   const [liveTime, setLiveTime] = useState(new Date());
 
@@ -45,16 +39,6 @@ export default function AdminDashboard() {
     const timer = setInterval(() => setLiveTime(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);
-
-  const daysOfWeek = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
-  const currentYear = selectedDate.getFullYear();
-  const currentMonth = selectedDate.getMonth();
-  
-  const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
-  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-  const calendarCells = [];
-  for (let i = 0; i < firstDayOfMonth; i++) calendarCells.push(null);
-  for (let i = 1; i <= daysInMonth; i++) calendarCells.push(i);
 
   const navigate = useNavigate();
   const [stats, setStats] = useState([
@@ -115,24 +99,30 @@ export default function AdminDashboard() {
 
       {/* KONTEN UTAMA */}
       <div className="flex-1 p-6 md:p-10 max-w-[1600px] mx-auto space-y-8 w-full overflow-hidden">
-        {/* TOP BAR BARU DENGAN SHADCN DROPDOWN */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100/60 pb-4">
-          <CategoryFilter />
+        {/* CONTROL BAR TUNGGAL (1 FILTER & KOMPONEN UI DATERANGEPICKER) */}
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 bg-slate-50 p-3.5 rounded-2xl border border-slate-100/60 shadow-xs">
+          {/* Sisi Kiri: Breadcrumbs & Live Clock */}
+          <div className="flex items-center gap-4 pl-1">
+            <div className="text-[11px] font-bold text-slate-400 tracking-wider uppercase">
+              Dashboard <span className="mx-1 text-slate-300">/</span> <span className="text-indigo-600 font-extrabold">Overview</span>
+            </div>
+            <div className="h-4 w-[1px] bg-slate-200 hidden md:block"></div>
+            <div className="hidden md:flex items-center gap-2 text-xs text-slate-500 font-semibold bg-white px-3 py-1.5 rounded-xl border border-slate-100 shadow-2xs">
+              <FaClock className="text-indigo-500" size={12} />
+              <span>{liveTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' })} WIB</span>
+            </div>
+          </div>
 
-          <div className="flex items-center gap-4 self-end sm:self-auto">
+          {/* Sisi Kanan: 1 Category Filter, Komponen UI DateRangePicker & Profil Dropdown */}
+          <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto justify-between lg:justify-end">
+            <CategoryFilter />
+            <DateRangePicker />
 
-            <DateRangePicker/>
-            {/* Bell Notifikasi */}
-            <button className="w-10 h-10 bg-white rounded-xl border border-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-50 transition-colors relative">
-              <FaRegBell size={16} />
-              <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-rose-500 rounded-full"></span>
-            </button>
-
-            {/* KOMPONEN 2: SHADCN DROPDOWN MENU (Profil Admin) */}
+            {/* Profil Admin Dropdown */}
             <div className="relative">
               <button
                 onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
-                className="flex items-center gap-3 bg-white p-1.5 pr-4 rounded-2xl border border-slate-100 hover:bg-slate-50 transition-all text-left shadow-sm"
+                className="flex items-center gap-3 bg-white p-1.5 pr-4 rounded-2xl border border-slate-100 hover:bg-slate-50 transition-all text-left shadow-2xs"
               >
                 <div className="w-7 h-7 bg-indigo-600 rounded-lg flex items-center justify-center text-white text-xs font-black">
                   NB
@@ -172,7 +162,6 @@ export default function AdminDashboard() {
                       Preferences
                     </button>
                     <div className="border-t border-slate-50 my-1"></div>
-                    {/* Ganti bagian button Log Out menjadi seperti ini */}
                     <button
                       onClick={() => {
                         localStorage.removeItem('luneve_user');
@@ -182,76 +171,6 @@ export default function AdminDashboard() {
                     >
                       <FaRightFromBracket size={12} /> Log Out
                     </button>
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* ================= BARIS KEDUA (MENGISI KEKOSONGAN DI BAWAH SEARCH) ================= */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-50 p-3 rounded-2xl border border-slate-100/50">
-          
-          {/* Mengisi area kosong dengan penunjuk halaman (Breadcrumbs) & Live Clock digital */}
-          <div className="flex items-center gap-4 pl-1">
-            <div className="text-[11px] font-bold text-slate-400 tracking-wider uppercase">
-              Dashboard <span className="mx-1 text-slate-300">/</span> <span className="text-indigo-600 font-extrabold">Overview</span>
-            </div>
-            <div className="h-4 w-[1px] bg-slate-200 hidden md:block"></div>
-            <div className="hidden md:flex items-center gap-2 text-xs text-slate-500 font-semibold bg-white px-3 py-1 rounded-xl border border-slate-100 shadow-sm">
-              <FaClock className="text-indigo-500" size={11} />
-              <span>{liveTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' })} WIB</span>
-            </div>
-          </div>
-
-          {/* SISI KANAN SECONDARY BAR: CATEGORY FILTER & CALENDAR */}
-          <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
-            <CategoryFilter />
-            
-            {/* Calendar Pop-over */}
-            <div className="relative">
-              <button 
-                onClick={() => setIsCalendarOpen(!isCalendarOpen)}
-                className="h-9 px-3 bg-white rounded-xl border border-slate-100 flex items-center gap-2 text-xs font-bold text-slate-600 hover:bg-slate-50 transition-colors shadow-sm"
-              >
-                <FaCalendarDays className="text-[#6366f1]" size={12} />
-                <span>{selectedDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}</span>
-                <FaChevronDown size={8} className="text-slate-400" />
-              </button>
-
-              {isCalendarOpen && (
-                <>
-                  <div className="fixed inset-0 z-30" onClick={() => setIsCalendarOpen(false)}></div>
-                  <div className="absolute right-0 mt-2 p-3 bg-white rounded-2xl border border-slate-100 shadow-xl z-40 w-[240px] animate-in fade-in slide-in-from-top-2 duration-150">
-                    <div className="text-center text-xs font-black text-slate-900 mb-2">
-                      {selectedDate.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' })}
-                    </div>
-                    <div className="grid grid-cols-7 gap-1 text-center text-[10px] font-bold text-slate-400 mb-1">
-                      {daysOfWeek.map((day) => <div key={day}>{day}</div>)}
-                    </div>
-                    <div className="grid grid-cols-7 gap-1">
-                      {calendarCells.map((day, index) => (
-                        <button
-                          key={index}
-                          disabled={!day}
-                          onClick={() => {
-                            if(day) {
-                              setSelectedDate(new Date(currentYear, currentMonth, day));
-                              setIsCalendarOpen(false);
-                            }
-                          }}
-                          className={`h-6 text-[10px] font-bold rounded-lg flex items-center justify-center transition-all ${
-                            !day ? "opacity-0 pointer-events-none" : ""
-                          } ${
-                            day === selectedDate.getDate()
-                              ? "bg-[#6366f1] text-white shadow-md"
-                              : "text-slate-700 hover:bg-slate-50"
-                          }`}
-                        >
-                          {day}
-                        </button>
-                      ))}
-                    </div>
                   </div>
                 </>
               )}

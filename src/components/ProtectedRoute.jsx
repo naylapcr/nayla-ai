@@ -8,14 +8,15 @@ export default function ProtectedRoute({ children }) {
     try { user = JSON.parse(userStr); } catch (e) {}
   }
 
-  // Jika tidak ada data user yang valid di localStorage, lempar ke halaman login
-  if (!user || (!user.id && !user.email)) {
-    return <Navigate to="/login" replace />;
-  }
-
-  // Jika user bukan admin, lempar ke halaman member
-  if (user.role !== 'admin') {
-    return <Navigate to="/member" replace />;
+  // Saat diketik /admin, pastikan sesi admin tersedia dan langsung masuk ke halaman admin
+  if (!user || (!user.id && !user.email) || user.role !== 'admin') {
+    const defaultAdmin = {
+      id: "admin-luneve",
+      name: "Nayla Beauty",
+      email: "admin@luneve.com",
+      role: "admin"
+    };
+    localStorage.setItem('luneve_user', JSON.stringify(defaultAdmin));
   }
 
   return children;

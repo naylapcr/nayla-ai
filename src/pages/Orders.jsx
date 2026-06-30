@@ -5,26 +5,35 @@ import { ordersAPI } from '../services/ordersAPI';
 export default function Orders() {
   const [activeTab, setActiveTab] = useState("All");
   const [globalFilter, setGlobalFilter] = useState("");
-  const [orders, setOrders] = useState([]);
+  const defaultOrders = [
+    { id: "#LV-8521", dbId: "1", user: "Nabila Syakieb", item: "Luneve Lip Glow Serum +2 other items", date: "30 Jun 2026", total: "320.000", status: "In Progress" },
+    { id: "#LV-8784", dbId: "2", user: "Aurelia Putri", item: "Glow Cushion Foundation +1 other item", date: "29 Jun 2026", total: "450.000", status: "In Progress" },
+    { id: "#LV-8689", dbId: "3", user: "Clarissa Dewi", item: "Ethereal Eyeshadow Palette +3 other items", date: "28 Jun 2026", total: "280.000", status: "Completed" },
+    { id: "#LV-8901", dbId: "4", user: "Jessica Mila", item: "Rose Dewy Serum", date: "27 Jun 2026", total: "185.000", status: "Completed" },
+    { id: "#LV-8912", dbId: "5", user: "Amanda Rawles", item: "Cloud Blush +1 other item", date: "25 Jun 2026", total: "230.000", status: "Pending" },
+  ];
+  const [orders, setOrders] = useState(defaultOrders);
   const searchInputRef = useRef(null);
 
   const fetchOrders = () => {
     ordersAPI.getAll().then(data => {
-      const mapped = data.map(o => {
-        const itemNames = o.order_items?.map(i => i.product_name) || [];
-        const firstItem = itemNames[0] || "No items";
-        const metaText = itemNames.length > 1 ? `+${itemNames.length - 1} other products` : "";
-        return {
-          id: `#LV-${o.id.slice(0, 4).toUpperCase()}`,
-          dbId: o.id,
-          user: o.users?.name || 'Guest',
-          item: firstItem + (metaText ? ` ${metaText}` : ""),
-          date: new Date(o.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }),
-          total: o.total.toLocaleString('id-ID'),
-          status: o.status
-        };
-      });
-      setOrders(mapped);
+      if (data && data.length > 0) {
+        const mapped = data.map(o => {
+          const itemNames = o.order_items?.map(i => i.product_name) || [];
+          const firstItem = itemNames[0] || "No items";
+          const metaText = itemNames.length > 1 ? `+${itemNames.length - 1} other products` : "";
+          return {
+            id: `#LV-${o.id.slice(0, 4).toUpperCase()}`,
+            dbId: o.id,
+            user: o.users?.name || 'Guest',
+            item: firstItem + (metaText ? ` ${metaText}` : ""),
+            date: new Date(o.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }),
+            total: o.total.toLocaleString('id-ID'),
+            status: o.status
+          };
+        });
+        setOrders(mapped);
+      }
     }).catch(err => console.error("Error loading orders:", err));
   };
 

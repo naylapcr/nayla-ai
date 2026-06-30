@@ -5,26 +5,35 @@ import { customersAPI } from '../services/customersAPI';
 export default function CustomerManagement() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedTier, setSelectedTier] = useState('All');
-  const [customers, setCustomers] = useState([]);
+  const defaultCustomers = [
+    { id: "C001", dbId: "1", name: "Nabila Syakieb", email: "nabila.syakieb@gmail.com", phone: "+62 812-3456-7890", tier: "VIP", totalOrders: 14, totalSpend: "4.500.000", joinDate: "12 Jan 2026", status: "Active" },
+    { id: "C002", dbId: "2", name: "Aurelia Putri", email: "aurelia.p@yahoo.com", phone: "+62 813-9876-5432", tier: "Gold", totalOrders: 8, totalSpend: "2.100.000", joinDate: "18 Feb 2026", status: "Active" },
+    { id: "C003", dbId: "3", name: "Clarissa Dewi", email: "clarissa.d@gmail.com", phone: "+62 811-2233-4455", tier: "Silver", totalOrders: 5, totalSpend: "1.250.000", joinDate: "05 Mar 2026", status: "Active" },
+    { id: "C004", dbId: "4", name: "Jessica Mila", email: "jessica.m@outlook.com", phone: "+62 815-6677-8899", tier: "VIP", totalOrders: 19, totalSpend: "6.800.000", joinDate: "20 Jan 2026", status: "Active" },
+    { id: "C005", dbId: "5", name: "Amanda Rawles", email: "amanda.r@gmail.com", phone: "+62 878-1122-3344", tier: "Bronze", totalOrders: 2, totalSpend: "450.000", joinDate: "14 Apr 2026", status: "Active" },
+  ];
+  const [customers, setCustomers] = useState(defaultCustomers);
 
   const fetchCustomers = () => {
     customersAPI.getAll().then(data => {
-      const mapped = data.map(c => {
-        const totalSpend = (c.orders || []).reduce((sum, o) => sum + (o.total || 0), 0);
-        return {
-          id: `C${c.id.slice(0, 3).toUpperCase()}`,
-          dbId: c.id,
-          name: c.name,
-          email: c.email,
-          phone: c.phone || '+62 812-3456-7890',
-          tier: c.tier || 'Bronze',
-          totalOrders: (c.orders || []).length,
-          totalSpend: totalSpend.toLocaleString('id-ID'),
-          joinDate: new Date(c.join_date || c.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }),
-          status: c.status || 'Active'
-        };
-      });
-      setCustomers(mapped);
+      if (data && data.length > 0) {
+        const mapped = data.map(c => {
+          const totalSpend = (c.orders || []).reduce((sum, o) => sum + (o.total || 0), 0);
+          return {
+            id: `C${c.id.slice(0, 3).toUpperCase()}`,
+            dbId: c.id,
+            name: c.name,
+            email: c.email,
+            phone: c.phone || '+62 812-3456-7890',
+            tier: c.tier || 'Bronze',
+            totalOrders: (c.orders || []).length,
+            totalSpend: totalSpend.toLocaleString('id-ID'),
+            joinDate: new Date(c.join_date || c.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }),
+            status: c.status || 'Active'
+          };
+        });
+        setCustomers(mapped);
+      }
     }).catch(err => console.error("Error loading customers:", err));
   };
 

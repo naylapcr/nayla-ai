@@ -7,7 +7,15 @@ export default function Products() {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
-  const [products, setProducts] = useState([]);
+  const defaultProducts = [
+    { id: 1, name: "Velvet Lip Tint", cat: "Lips", brand: "Luneve", stock: 120, price: 145000, img: "💄", rate: 4.9, description: "Hydrating matte finish lip tint." },
+    { id: 2, name: "Glow Cushion Foundation", cat: "Face", brand: "Luneve", stock: 45, price: 210000, img: "🎨", rate: 4.8, description: "Lightweight dewy cushion foundation." },
+    { id: 3, name: "Ethereal Eyeshadow Palette", cat: "Eyes", brand: "Luneve", stock: 15, price: 320000, img: "👁️", rate: 5.0, description: "9-color highly pigmented palette." },
+    { id: 4, name: "Rose Dewy Serum", cat: "Skincare", brand: "Luneve", stock: 200, price: 185000, img: "🌸", rate: 4.7, description: "Rose infused deep hydration essence." },
+    { id: 5, name: "Cloud Blush", cat: "Face", brand: "Luneve", stock: 88, price: 115000, img: "☁️", rate: 4.9, description: "Soft cloud-like powder blush." },
+    { id: 6, name: "Silk Precision Eyeliner", cat: "Eyes", brand: "Luneve", stock: 35, price: 85000, img: "✒️", rate: 4.6, description: "Waterproof liquid eyeliner brush." },
+  ];
+  const [products, setProducts] = useState(defaultProducts);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [newProduct, setNewProduct] = useState({
     title: '',
@@ -20,18 +28,20 @@ export default function Products() {
 
   const fetchProducts = () => {
     productsAPI.getAll().then(data => {
-      const mapped = data.map(p => ({
-        id: p.id,
-        name: p.title,
-        cat: p.category,
-        brand: p.brand,
-        price: p.price,
-        stock: p.stock,
-        img: p.img || '🛍️',
-        rate: p.rate || 0.0,
-        description: p.description
-      }));
-      setProducts(mapped);
+      if (data && data.length > 0) {
+        const mapped = data.map(p => ({
+          id: p.id,
+          name: p.title,
+          cat: p.category,
+          brand: p.brand,
+          price: p.price,
+          stock: p.stock,
+          img: p.img || '🛍️',
+          rate: p.rate || 0.0,
+          description: p.description
+        }));
+        setProducts(mapped);
+      }
     }).catch(err => console.error("Error fetching products:", err));
   };
 

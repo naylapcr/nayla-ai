@@ -5,21 +5,29 @@ import { reviewsAPI } from '../services/reviewsAPI';
 export default function Reviews() {
   const [activeTooltipId, setActiveTooltipId] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [reviews, setReviews] = useState([]);
+  const defaultReviews = [
+    { id: "#REV-001", dbId: "1", user: "Nabila Syakieb", date: "30 Jun 2026", text: "Warnanya sangat cantik dan tahan lama seharian di bibir! Serumnya juga bikin lembab, tidak bikin kering sama sekali. Love it!", rate: 5, product: "Luneve Lip Glow Serum", status: "Approved" },
+    { id: "#REV-002", dbId: "2", user: "Aurelia Putri", date: "28 Jun 2026", text: "Cushion foundation ter-glowing yang pernah aku coba! Coverage buildable tapi tetap terasa ringan seperti tidak pakai makeup.", rate: 5, product: "Glow Cushion Foundation", status: "Approved" },
+    { id: "#REV-003", dbId: "3", user: "Clarissa Dewi", date: "25 Jun 2026", text: "Pigmentasi eyeshadow-nya bagus banget, fallout-nya minim dan warna glitter-nya benar-benar cantik untuk acara malam.", rate: 5, product: "Ethereal Eyeshadow Palette", status: "Pending" },
+    { id: "#REV-004", dbId: "4", user: "Jessica Mila", date: "22 Jun 2026", text: "Serum mawar ini wanginya menenangkan sekali. Teksturnya cepat meresap dan langsung bikin wajah kenyal di pagi hari.", rate: 4.8, product: "Rose Dewy Serum", status: "Approved" },
+  ];
+  const [reviews, setReviews] = useState(defaultReviews);
 
   const fetchReviews = () => {
     reviewsAPI.getAll().then(data => {
-      const mapped = data.map(r => ({
-        id: `#REV-${r.id.slice(0, 3).toUpperCase()}`,
-        dbId: r.id,
-        user: r.users?.name || 'Anonymous',
-        date: new Date(r.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }),
-        text: r.text,
-        rate: r.rating,
-        product: r.products?.title || 'Unknown Product',
-        status: r.status
-      }));
-      setReviews(mapped);
+      if (data && data.length > 0) {
+        const mapped = data.map(r => ({
+          id: `#REV-${r.id.slice(0, 3).toUpperCase()}`,
+          dbId: r.id,
+          user: r.users?.name || 'Anonymous',
+          date: new Date(r.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }),
+          text: r.text,
+          rate: r.rating,
+          product: r.products?.title || 'Unknown Product',
+          status: r.status
+        }));
+        setReviews(mapped);
+      }
     }).catch(err => console.error("Error loading reviews:", err));
   };
 

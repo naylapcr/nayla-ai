@@ -13,7 +13,9 @@ export default function RecentOrderRow({ id, product, icon, meta, customer, amou
         </div>
       </td>
       <td className="py-4 text-gray-600 font-medium">{customer}</td>
-      <td className="py-4 font-black text-gray-900">${amount}</td>
+      <td className="py-4 font-black text-gray-900">
+        {typeof amount === 'number' ? `Rp ${amount.toLocaleString('id-ID')}` : amount}
+      </td>
       <td className="py-4">
         <span className={`px-2.5 py-1 rounded-xl font-black text-[9px] uppercase tracking-wider ${
           status === 'In Progress' ? 'bg-indigo-50 text-indigo-500' : 'bg-orange-50 text-orange-500'
