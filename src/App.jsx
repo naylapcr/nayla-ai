@@ -16,6 +16,7 @@ const GuestDashboard = lazy(() => import("./pages/GuestDashboard"));
 const MemberDashboard = lazy(() => import("./pages/MemberDashboard")); // BUAT BARU
 const ManagementHub = lazy(() => import('./pages/ManagementHub'));
 const CustomerManagement = lazy(() => import('./pages/CustomerManagement'));
+const Users = lazy(() => import('./pages/Users'));
 
 import MainLayout from './layouts/MainLayout';
 
@@ -42,6 +43,7 @@ function App() {
           }>
             <Route index element={<Dashboard />} />
             <Route path="products" element={<Products />} />
+            <Route path="users" element={<Users />} />
             <Route path="orders" element={<Orders />} />
             <Route path="reviews" element={<Reviews />} />
             <Route path="settings" element={<Settings />} />

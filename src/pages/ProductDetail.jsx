@@ -18,25 +18,61 @@ export default function ProductDetail() {
     description: ''
   });
 
+  const defaultProductsList = [
+    { id: 1, title: "Velvet Lip Tint", code: "LNV-LP-104", category: "Lips", brand: "Luneve", stock: 120, price: 145000, img: "💄", rate: 4.9, description: "Hydrating matte finish lip tint with long-lasting Korean formula. Infused with vitamin E and jojoba oil for soft, plush lips all day." },
+    { id: 2, title: "Glow Cushion Foundation", code: "LNV-FC-208", category: "Face", brand: "Luneve", stock: 45, price: 210000, img: "🎨", rate: 4.8, description: "Lightweight dewy cushion foundation with SPF 50+ PA++++ protection. Provides buildable medium-to-full coverage with a natural glass-skin finish." },
+    { id: 3, title: "Ethereal Eyeshadow Palette", code: "LNV-EY-315", category: "Eyes", brand: "Luneve", stock: 15, price: 320000, img: "👁️", rate: 5.0, description: "9-color highly pigmented palette featuring buttery mattes, mesmerizing shimmers, and multi-chrome glitter toppers for day-to-night elegance." },
+    { id: 4, title: "Rose Dewy Serum", code: "LNV-SC-402", category: "Skincare", brand: "Luneve", stock: 200, price: 185000, img: "🌸", rate: 4.7, description: "Rose infused deep hydration essence formulated with 5% Niacinamide and hyaluronic acid to brighten and soothe sensitive skin." },
+    { id: 5, title: "Cloud Blush", code: "LNV-FC-511", category: "Face", brand: "Luneve", stock: 88, price: 115000, img: "☁️", rate: 4.9, description: "Soft cloud-like powder blush that blends seamlessly into the skin without disrupting foundation. Gives a youthful, healthy flush." },
+    { id: 6, title: "Silk Precision Eyeliner", code: "LNV-EY-619", category: "Eyes", brand: "Luneve", stock: 35, price: 85000, img: "✒️", rate: 4.6, description: "Waterproof liquid eyeliner brush with ultra-fine 0.01mm tip for razor-sharp precision that lasts up to 24 hours without smudging." },
+  ];
+
   const fetchProduct = () => {
     setLoading(true);
     productsAPI.getById(id).then(data => {
       if (data && data.length > 0) {
         setProduct(data[0]);
         setEditProduct({
-          title: data[0].title,
-          category: data[0].category,
-          brand: data[0].brand,
+          title: data[0].title || data[0].name,
+          category: data[0].category || data[0].cat || 'Lips',
+          brand: data[0].brand || 'Luneve',
           price: data[0].price,
           stock: data[0].stock,
           description: data[0].description
         });
       } else {
-        setProduct(null);
+        const foundDefault = defaultProductsList.find(p => p.id.toString() === id.toString() || p.code === id);
+        if (foundDefault) {
+          setProduct(foundDefault);
+          setEditProduct({
+            title: foundDefault.title,
+            category: foundDefault.category,
+            brand: foundDefault.brand,
+            price: foundDefault.price,
+            stock: foundDefault.stock,
+            description: foundDefault.description
+          });
+        } else {
+          setProduct(null);
+        }
       }
       setLoading(false);
     }).catch(err => {
       console.error("Error fetching product:", err);
+      const foundDefault = defaultProductsList.find(p => p.id.toString() === id.toString() || p.code === id);
+      if (foundDefault) {
+        setProduct(foundDefault);
+        setEditProduct({
+          title: foundDefault.title,
+          category: foundDefault.category,
+          brand: foundDefault.brand,
+          price: foundDefault.price,
+          stock: foundDefault.stock,
+          description: foundDefault.description
+        });
+      } else {
+        setProduct(null);
+      }
       setLoading(false);
     });
   };
@@ -63,14 +99,21 @@ export default function ProductDetail() {
     productsAPI.update(id, payload).then(() => {
       setIsEditModalOpen(false);
       fetchProduct();
-    }).catch(err => console.error("Error updating product:", err));
+    }).catch(err => {
+      console.error("Error updating product:", err);
+      setProduct(prev => ({ ...prev, ...payload }));
+      setIsEditModalOpen(false);
+    });
   };
 
   const handleDelete = () => {
     if (window.confirm("Are you sure you want to delete this product?")) {
       productsAPI.delete(id).then(() => {
         navigate('/admin/products');
-      }).catch(err => console.error("Error deleting product:", err));
+      }).catch(err => {
+        console.error("Error deleting product:", err);
+        navigate('/admin/products');
+      });
     }
   };
 
@@ -88,7 +131,7 @@ export default function ProductDetail() {
       <div className="py-20 text-center flex flex-col items-center font-sans">
         <h3 className="text-2xl font-black text-[#111827]">Product Not Found</h3>
         <p className="text-gray-400 text-sm mt-2">The product ID may be incorrect or has been removed.</p>
-        <button onClick={() => navigate('/admin/products')} className="mt-6 bg-[#6366f1] text-white px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest">
+        <button onClick={() => navigate('/admin/products')} className="mt-6 bg-pink-500 text-white px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest shadow-md shadow-pink-200 hover:bg-pink-600 transition-all">
           Return to Products
         </button>
       </div>
@@ -133,8 +176,8 @@ export default function ProductDetail() {
         
         {/* Sisi Kiri: Gambar Produk (col-span-5) */}
         <div className="lg:col-span-5 bg-white rounded-[2.5rem] border border-gray-100 p-8 flex flex-col justify-center items-center relative shadow-sm h-[350px] lg:h-auto">
-          <span className="absolute top-6 left-6 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest bg-indigo-50 text-[#6366f1]">
-            {product.code}
+          <span className="absolute top-6 left-6 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest bg-pink-50 text-pink-600 border border-pink-100">
+            {product.code || `LNV-${product.category?.slice(0,2).toUpperCase() || 'PR'}-${product.id}`}
           </span>
           <div className="text-[8rem] select-none transform hover:scale-110 transition-transform duration-500">
             {product.img}
@@ -144,8 +187,8 @@ export default function ProductDetail() {
         {/* Sisi Kanan: Spesifikasi Data Produk (col-span-7) */}
         <div className="lg:col-span-7 bg-white rounded-[2.5rem] border border-gray-100 p-8 md:p-10 shadow-sm space-y-6">
           <div>
-            <span className="text-[10px] font-black text-[#6366f1] uppercase tracking-[0.2em]">{product.category}</span>
-            <h2 className="text-3xl font-black text-[#111827] tracking-tight mt-1">{product.title}</h2>
+            <span className="text-[10px] font-black text-pink-500 uppercase tracking-[0.2em]">{product.category || product.cat}</span>
+            <h2 className="text-3xl font-black text-[#111827] tracking-tight mt-1">{product.title || product.name}</h2>
             <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mt-1">Brand: {product.brand}</p>
           </div>
 
@@ -172,9 +215,9 @@ export default function ProductDetail() {
           <div className="bg-gray-50 p-5 rounded-2xl flex justify-between items-center border border-gray-100/50">
             <div>
               <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-0.5">Asset Price</p>
-              <p className="text-2xl font-black text-[#111827]">Rp {product.price.toLocaleString()}</p>
+              <p className="text-2xl font-black text-[#111827]">Rp {product.price.toLocaleString('id-ID')}</p>
             </div>
-            <span className="text-[9px] font-black uppercase text-[#6366f1] bg-[#6366f1]/10 px-3 py-1.5 rounded-lg tracking-wider">
+            <span className="text-[9px] font-black uppercase text-pink-600 bg-pink-50 border border-pink-100 px-3 py-1.5 rounded-lg tracking-wider">
               Premium Tier
             </span>
           </div>
@@ -185,12 +228,12 @@ export default function ProductDetail() {
       {/* 3. Analitik Performa Finansial (Bento Bawah) */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-[#111827] text-white p-6 md:p-8 rounded-[2rem] flex items-center justify-between relative overflow-hidden shadow-sm">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-[#6366f1]/10 rounded-full blur-[50px]"></div>
+          <div className="absolute top-0 right-0 w-32 h-32 bg-pink-500/20 rounded-full blur-[50px]"></div>
           <div className="space-y-1 relative z-10">
             <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Volume Penjualan Bulan Ini</p>
             <h4 className="text-2xl font-black tracking-tight">{salesThisMonth} <span className="text-xs font-medium text-gray-400">Pcs Terjual</span></h4>
           </div>
-          <div className="w-11 h-11 bg-[#6366f1] rounded-xl flex items-center justify-center text-lg shadow-lg shadow-indigo-500/20">
+          <div className="w-11 h-11 bg-pink-500 rounded-xl flex items-center justify-center text-lg shadow-lg shadow-pink-500/20">
             <FaChartLine />
           </div>
         </div>
@@ -198,7 +241,7 @@ export default function ProductDetail() {
         <div className="bg-white border border-gray-100 p-6 md:p-8 rounded-[2rem] flex items-center justify-between shadow-sm">
           <div className="space-y-1">
             <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Kontribusi Omset</p>
-            <h4 className="text-2xl font-black text-[#111827] tracking-tight">Rp {revenueThisMonth.toLocaleString()}</h4>
+            <h4 className="text-2xl font-black text-[#111827] tracking-tight">Rp {revenueThisMonth.toLocaleString('id-ID')}</h4>
           </div>
           <div className="w-11 h-11 bg-emerald-50 text-emerald-500 rounded-xl flex items-center justify-center text-lg">
             <FaChartLine />

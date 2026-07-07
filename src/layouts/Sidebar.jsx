@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { 
   FaThLarge, FaBox, FaShoppingBag, 
-  FaStar, FaCog, FaBug, FaSignOutAlt, FaUsers 
+  FaStar, FaCog, FaBug, FaSignOutAlt, FaUsers, FaUserShield 
 } from "react-icons/fa";
 
 export default function Sidebar() {
@@ -12,10 +12,10 @@ export default function Sidebar() {
   const menus = [
     { name: "Dashboard", path: "/admin", icon: <FaThLarge /> },
     { name: "Products", path: "/admin/products", icon: <FaBox /> },
-    { name: "Customers", path: "/admin/customers", icon: <FaUsers /> }, // Icon disesuaikan ke FaUsers
+    { name: "Users", path: "/admin/users", icon: <FaUserShield /> },
+    { name: "Customers", path: "/admin/customers", icon: <FaUsers /> },
     { name: "Orders", path: "/admin/orders", icon: <FaShoppingBag /> },
     { name: "Reviews", path: "/admin/reviews", icon: <FaStar /> },
-  
   ];
 
   // PERBAIKAN: Path error disesuaikan dengan prefix /admin

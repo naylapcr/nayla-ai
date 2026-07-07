@@ -167,16 +167,16 @@ export default function DateRangePicker() {
                     relative h-8 text-[11px] font-medium transition-all
                     ${cell.other ? "text-slate-300" : "text-slate-700"}
                     ${start || end
-                      ? "bg-indigo-600 text-white font-bold rounded-lg z-10"
+                      ? "bg-pink-500 text-white font-bold rounded-lg z-10 shadow-sm shadow-pink-200"
                       : ""}
                     ${inRange && !start && !end
-                      ? "bg-indigo-50 text-indigo-700 rounded-none"
+                      ? "bg-pink-50 text-pink-700 rounded-none"
                       : ""}
                     ${!start && !end && !inRange
                       ? "hover:bg-slate-100 rounded-lg"
                       : ""}
                     ${isToday && !start && !end
-                      ? "font-black text-indigo-600"
+                      ? "font-black text-pink-500"
                       : ""}
                   `}
                 >
@@ -198,7 +198,7 @@ export default function DateRangePicker() {
             {!selecting && startDate && endDate && (
               <button
                 onClick={() => setIsOpen(false)}
-                className="text-[10px] font-bold px-3 py-1.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+                className="text-[10px] font-bold px-3 py-1.5 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors shadow-sm shadow-pink-100"
               >
                 Apply
               </button>

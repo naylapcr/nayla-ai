@@ -8,7 +8,7 @@ export default function ProtectedRoute({ children }) {
     try { user = JSON.parse(userStr); } catch (e) {}
   }
 
-  // Saat diketik /admin, pastikan sesi admin tersedia dan langsung masuk ke halaman admin
+  // Saat diketik /admin di browser, pastikan sesi admin otomatis tersedia agar langsung bisa masuk ke halaman admin
   if (!user || (!user.id && !user.email) || user.role !== 'admin') {
     const defaultAdmin = {
       id: "admin-luneve",
@@ -20,4 +20,4 @@ export default function ProtectedRoute({ children }) {
   }
 
   return children;
-}
+}

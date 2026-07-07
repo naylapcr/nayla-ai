@@ -105,6 +105,12 @@ export default function GuestDashboard() {
     navigate('/login');
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('luneve_user');
+    setCurrentUser(null);
+    setToast({ show: true, message: "Anda telah berhasil logout. Sampai jumpa lagi! 👋" });
+  };
+
   const toggleLike = (id) => {
     setLikedProducts(prev => ({ ...prev, [id]: !prev[id] }));
   };
@@ -240,66 +246,94 @@ export default function GuestDashboard() {
       </a>
 
       {/* PROMO BANNER */}
-      <div className="bg-gradient-to-r from-rose-200 to-purple-200 text-rose-800 text-center py-2.5 text-[11px] font-bold tracking-wider uppercase">
-        Free Shipping on Orders Over Rp 500K 🛍️ | {currentUser && currentUser.role ? (
-          <Link to={currentUser.role === 'admin' ? '/admin' : '/member'} className="underline cursor-pointer hover:text-rose-600 transition-colors">Buka Dashboard Anda</Link>
-        ) : (
-          <Link to="/register" className="underline cursor-pointer hover:text-rose-600 transition-colors">Gabung Sekarang</Link>
-        )}
+      <div className="bg-gradient-to-r from-rose-500 via-pink-500 to-purple-500 text-white text-center py-2.5 px-4 text-xs font-bold tracking-widest uppercase flex justify-center items-center gap-2 shadow-sm whitespace-nowrap overflow-x-auto">
+        <span>✨ FREE EXPRESS SHIPPING ON ORDERS OVER RP 500.000</span>
+        <span className="opacity-60">•</span>
+        <span>USE VOUCHER CODE: <strong className="underline decoration-wavy decoration-white/80">GLAM20</strong> FOR 20% OFF! 💖</span>
       </div>
 
-      {/* NAVBAR - Diperbaiki Pakai Link Login & Register */}
-      <nav className="bg-white/80 border-b border-rose-50 sticky top-0 z-50 backdrop-blur-lg">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <div className="flex items-center gap-10">
-            <Link to="/" className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-purple-300 tracking-tight">
+      {/* NAVBAR */}
+      <nav className="bg-white/85 border-b border-rose-100/60 sticky top-0 z-50 backdrop-blur-md shadow-sm transition-all">
+        <div className="max-w-7xl mx-auto px-6 py-3.5 flex justify-between items-center gap-4">
+          
+          {/* LEFT: Brand & Navigation Links */}
+          <div className="flex items-center gap-8 lg:gap-10">
+            <Link to="/" className="text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-rose-500 via-pink-500 to-purple-500 tracking-tight shrink-0">
               LUNEVE
             </Link>
-            <div className="hidden lg:flex items-center gap-8 text-[11px] font-bold uppercase tracking-[0.15em] text-gray-400">
-              <a href="#catalogue" className="hover:text-rose-400 transition-colors duration-300">Shop</a>
-              <a href="#crm-features" className="hover:text-rose-400 transition-colors duration-300">Features</a>
-              <a href="#tiering" className="hover:text-rose-400 transition-colors duration-300">Tiering</a>
-              <a href="#reviews" className="hover:text-rose-400 transition-colors duration-300">Reviews</a>
-              <a href="#faq" className="hover:text-rose-400 transition-colors duration-300">FAQ</a>
-              {currentUser && currentUser.role && (
-                <Link to={currentUser.role === 'admin' ? '/admin' : '/member'} className="text-rose-500 font-black hover:text-rose-600 transition-colors duration-300 underline">
-                  {currentUser.role === 'admin' ? 'Admin Panel ✨' : 'Member Area ✨'}
-                </Link>
-              )}
+            <div className="hidden lg:flex items-center gap-7 text-[11px] font-bold uppercase tracking-[0.15em] text-slate-500">
+              <a href="#catalogue" className="hover:text-pink-600 transition-colors duration-300 whitespace-nowrap">Shop</a>
+              <a href="#crm-features" className="hover:text-pink-600 transition-colors duration-300 whitespace-nowrap">Features</a>
+              <a href="#tiering" className="hover:text-pink-600 transition-colors duration-300 whitespace-nowrap">Tiering</a>
+              <a href="#reviews" className="hover:text-pink-600 transition-colors duration-300 whitespace-nowrap">Reviews</a>
+              <a href="#faq" className="hover:text-pink-600 transition-colors duration-300 whitespace-nowrap">FAQ</a>
             </div>
           </div>
           
-          <div className="flex items-center gap-4">
-            <div className="hidden md:block relative w-64 group">
-              <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-rose-300 group-focus-within:text-rose-400 transition-colors text-xs" />
+          {/* RIGHT: Search Bar & Actions */}
+          <div className="flex items-center gap-3 md:gap-4 shrink-0">
+            <div className="hidden md:block relative w-52 lg:w-60 group">
+              <FaSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-rose-300 group-focus-within:text-pink-500 transition-colors text-xs" />
               <input
                 ref={searchInputRef}
                 type="text"
                 placeholder="Search your shade..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-6 py-2.5 rounded-full bg-rose-50/50 border border-rose-100 outline-none text-xs font-medium focus:ring-2 focus:ring-rose-100 focus:border-rose-200 transition-all placeholder:text-rose-300"
+                className="w-full pl-9 pr-4 py-2 rounded-full bg-slate-50 border border-slate-200/80 outline-none text-xs font-medium focus:bg-white focus:ring-2 focus:ring-pink-500/20 focus:border-pink-300 transition-all placeholder:text-slate-400 text-slate-800"
               />
             </div>
             
-            {/* SMART NAVBAR (PRD v2) */}
-            {currentUser && currentUser.role ? (
-              <Link
-                to={currentUser.role === 'admin' ? '/admin' : '/member'}
-                className="bg-gradient-to-r from-rose-400 to-purple-400 text-white px-5 py-2 rounded-full text-[11px] font-bold hover:shadow-md transition-all shadow-sm flex items-center gap-1.5"
-              >
-                {currentUser.role === 'admin' ? 'Halaman Admin 🛡️' : 'Halaman Member 🎀'}
-              </Link>
-            ) : (
-              <>
-                <Link to="/login" className="text-[11px] font-bold text-rose-400 hover:text-rose-600 transition-colors">
-                  Login
-                </Link>
-                <Link to="/register" className="bg-gradient-to-r from-rose-300 to-purple-200 text-rose-700 px-5 py-2 rounded-full text-[11px] font-bold hover:shadow-md transition-all border border-rose-200/50">
-                  Register ✨
-                </Link>
-              </>
-            )}
+            {/* SMART ACTIONS */}
+            <div className="flex items-center gap-2">
+              {currentUser && currentUser.role ? (
+                <>
+                  <Link
+                    to={currentUser.role === 'admin' ? '/admin' : '/member'}
+                    className="inline-flex items-center gap-1.5 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white px-4 py-2 rounded-full text-xs font-black shadow-md shadow-pink-500/20 transition-all whitespace-nowrap hover:scale-105"
+                  >
+                    <span>{currentUser.role === 'admin' ? 'Dashboard Admin' : 'Member Area'}</span>
+                    <span className="text-xs">{currentUser.role === 'admin' ? '🛡️' : '🎀'}</span>
+                  </Link>
+
+                  <button
+                    onClick={handleLogout}
+                    className="inline-flex items-center gap-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 px-3.5 py-2 rounded-full text-xs font-bold border border-rose-200/80 transition-all whitespace-nowrap cursor-pointer hover:shadow-sm"
+                    title="Logout dari akun"
+                  >
+                    <span>Logout</span>
+                    <span className="text-xs">👋</span>
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/admin"
+                    onClick={(e) => {
+                      if (!currentUser || currentUser.role !== 'admin') {
+                        e.preventDefault();
+                        setToast({ show: true, message: "Silakan login sebagai Admin terlebih dahulu! 🛡️" });
+                        setTimeout(() => navigate('/login'), 1000);
+                      }
+                    }}
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 hover:text-slate-900 border border-slate-200/60 transition-all whitespace-nowrap"
+                    title="Buka Portal Admin"
+                  >
+                    <FaShieldAlt className="text-pink-500 text-xs shrink-0" />
+                    <span className="hidden sm:inline">Admin Portal</span>
+                  </Link>
+
+                  <Link to="/login" className="text-xs font-bold text-slate-700 hover:text-pink-600 transition-colors px-2 whitespace-nowrap">
+                    Login
+                  </Link>
+
+                  <Link to="/register" className="inline-flex items-center gap-1.5 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white px-4 py-2 rounded-full text-xs font-black shadow-md shadow-pink-500/20 transition-all whitespace-nowrap hover:scale-105 active:scale-95">
+                    <span>Register</span>
+                    <span className="text-xs">✨</span>
+                  </Link>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </nav>
@@ -319,10 +353,17 @@ export default function GuestDashboard() {
             </p>
             <div className="flex flex-wrap gap-4 pt-4">
               <Link
-                to={currentUser && currentUser.role ? (currentUser.role === 'admin' ? '/admin' : '/member') : '/register'}
+                to="/admin"
+                onClick={(e) => {
+                  if (!currentUser || currentUser.role !== 'admin') {
+                    e.preventDefault();
+                    setToast({ show: true, message: "Silakan login sebagai Admin terlebih dahulu! 🛡️" });
+                    setTimeout(() => navigate('/login'), 1000);
+                  }
+                }}
                 className="bg-gradient-to-r from-rose-400 to-purple-400 text-white px-8 py-4 rounded-full text-xs font-bold uppercase tracking-wider hover:shadow-xl hover:shadow-rose-100 transition-all duration-300 inline-flex items-center gap-3 shadow-md"
               >
-                {currentUser && currentUser.role ? (currentUser.role === 'admin' ? 'Ke Halaman Admin 🛡️' : 'Ke Halaman Member 🎀') : 'Belanja Sekarang 🛍️'}
+                Ke Halaman Admin 🛡️
               </Link>
               <a
                 href="#catalogue"

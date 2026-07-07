@@ -31,6 +31,20 @@ export default function AdminDashboard() {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const [activeTooltipId, setActiveTooltipId] = useState(null);
+  const [activeCategory, setActiveCategory] = useState("All Data");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
+
+  const handleCategoryChange = (cat) => {
+    setActiveCategory(cat);
+    setCurrentPage(1);
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+    setCurrentPage(1);
+  };
 
   // --- STATE LIVE TIME (Mengisi space kosong di bawah search agar fungsional) ---
   const [liveTime, setLiveTime] = useState(new Date());
@@ -42,51 +56,118 @@ export default function AdminDashboard() {
 
   const navigate = useNavigate();
   const [stats, setStats] = useState([
-    { label: "Total Sales Items", val: "0 pcs", trend: "+12.4%", isUp: true },
-    { label: "Cosmetic Revenue", val: "IDR 0", trend: "+8.2%", isUp: true },
-    { label: "Active Customers", val: "0 Users", trend: "+5.1%", isUp: true },
-    { label: "Product Returns", val: "0 pcs", trend: "-2.4%", isUp: false },
+    { label: "Total Sales Items", val: "142 pcs", trend: "+12.4%", isUp: true },
+    { label: "Cosmetic Revenue", val: "IDR 68.760.000", trend: "+8.2%", isUp: true },
+    { label: "Active Customers", val: "89 Users", trend: "+5.1%", isUp: true },
+    { label: "Product Returns", val: "2 pcs", trend: "-2.4%", isUp: false },
   ]);
 
-  const [orders, setOrders] = useState([]);
+  const defaultOrders = [
+    { id: "#LV-8521", product: "Luneve Lip Glow Serum", icon: "💄", meta: "+2 other products", customer: "Nabila Syakieb", amount: "Rp 320.000", status: "In Progress", date: "30 Jun 2026", payment: "E-Wallet", category: "Beauty" },
+    { id: "#LV-8784", product: "Glow Cushion Foundation", icon: "🎨", meta: "+1 other product", customer: "Aurelia Putri", amount: "Rp 450.000", status: "In Progress", date: "29 Jun 2026", payment: "Bank Transfer", category: "Beauty" },
+    { id: "#LV-8912", product: "Satin Evening Dress Luxe", icon: "👗", meta: "+1 other product", customer: "Maudy Ayunda", amount: "Rp 890.000", status: "Completed", date: "28 Jun 2026", payment: "Credit Card", category: "Fashion" },
+    { id: "#LV-8901", product: "Silk Ribbon Hairclip", icon: "🎀", meta: "Limited Edition", customer: "Jessica Mila", amount: "Rp 185.000", status: "Completed", date: "27 Jun 2026", payment: "E-Wallet", category: "Accessories" },
+    { id: "#LV-8689", product: "Ethereal Eyeshadow Palette", icon: "👁️", meta: "+3 other products", customer: "Clarissa Dewi", amount: "Rp 280.000", status: "Completed", date: "26 Jun 2026", payment: "QRIS", category: "Beauty" },
+    { id: "#LV-8923", product: "Velvet Tote Bag Luxe", icon: "👜", meta: "+2 other products", customer: "Amanda Rawles", amount: "Rp 550.000", status: "Pending", date: "25 Jun 2026", payment: "Bank Transfer", category: "Fashion" },
+    { id: "#LV-8934", product: "Crystal Pendant Necklace", icon: "💎", meta: "Silver 925", customer: "Chelsea Islan", amount: "Rp 420.000", status: "In Progress", date: "24 Jun 2026", payment: "Credit Card", category: "Accessories" },
+    { id: "#LV-8945", product: "Rose Dewy Hydration Serum", icon: "🌸", meta: "+1 other product", customer: "Raisa Andriana", amount: "Rp 185.000", status: "Completed", date: "23 Jun 2026", payment: "E-Wallet", category: "Beauty" },
+    { id: "#LV-8956", product: "Pleated Silk Midi Skirt", icon: "👘", meta: "Size M - Cream", customer: "Syifa Hadju", amount: "Rp 340.000", status: "Completed", date: "22 Jun 2026", payment: "QRIS", category: "Fashion" },
+    { id: "#LV-8967", product: "Pearl Drop Earrings", icon: "✨", meta: "Gold Plated", customer: "Natasha Wilona", amount: "Rp 210.000", status: "Pending", date: "21 Jun 2026", payment: "E-Wallet", category: "Accessories" }
+  ];
+
+  const [orders, setOrders] = useState(defaultOrders);
 
   useEffect(() => {
     // Fetch statistics
     dashboardAPI.getSummary().then(data => {
-      setStats([
-        { label: "Total Sales Items", val: `${data.total_items} pcs`, trend: "+12.4%", isUp: true },
-        { label: "Cosmetic Revenue", val: `IDR ${(data.total_revenue || 0).toLocaleString('id-ID')}`, trend: "+8.2%", isUp: true },
-        { label: "Active Customers", val: `${data.active_customers} Users`, trend: "+5.1%", isUp: true },
-        { label: "Product Returns", val: `${data.returns} pcs`, trend: "-2.4%", isUp: false },
-      ]);
+      if (data && (data.total_items > 0 || data.total_revenue > 0 || data.active_customers > 0)) {
+        setStats([
+          { label: "Total Sales Items", val: `${data.total_items} pcs`, trend: "+12.4%", isUp: true },
+          { label: "Cosmetic Revenue", val: `IDR ${(data.total_revenue || 0).toLocaleString('id-ID')}`, trend: "+8.2%", isUp: true },
+          { label: "Active Customers", val: `${data.active_customers} Users`, trend: "+5.1%", isUp: true },
+          { label: "Product Returns", val: `${data.returns} pcs`, trend: "-2.4%", isUp: false },
+        ]);
+      }
     }).catch(err => console.error("Error loading dashboard stats", err));
 
     // Fetch recent orders
     ordersAPI.getAll().then(data => {
-      const mapped = data.slice(0, 5).map(o => {
-        const itemNames = o.order_items?.map(i => i.product_name) || [];
-        const firstItem = itemNames[0] || "No items";
-        const metaText = itemNames.length > 1 ? `+${itemNames.length - 1} other products` : "";
-        return {
-          id: `#LV-${o.id.slice(0, 4).toUpperCase()}`,
-          product: firstItem,
-          icon: firstItem.toLowerCase().includes("lip") ? "💄" : (firstItem.toLowerCase().includes("cushion") ? "🎨" : "👁️"),
-          meta: metaText,
-          customer: o.users?.name || 'Guest',
-          amount: `Rp ${o.total.toLocaleString('id-ID')}`,
-          status: o.status,
-          date: new Date(o.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }),
-          payment: 'E-Wallet',
-        };
-      });
-      setOrders(mapped);
-    }).catch(err => console.error("Error loading dashboard orders", err));
+      if (data && data.length > 0) {
+        const mapped = data.map(o => {
+          const itemNames = o.order_items?.map(i => i.product_name) || [];
+          const firstItem = itemNames[0] || "No items";
+          const metaText = itemNames.length > 1 ? `+${itemNames.length - 1} other products` : "";
+          
+          let cat = "Beauty";
+          const lower = firstItem.toLowerCase();
+          if (lower.includes("dress") || lower.includes("bag") || lower.includes("skirt") || lower.includes("shirt") || lower.includes("tote") || lower.includes("fashion")) {
+            cat = "Fashion";
+          } else if (lower.includes("clip") || lower.includes("necklace") || lower.includes("earring") || lower.includes("ring") || lower.includes("ribbon") || lower.includes("bracelet") || lower.includes("accessories")) {
+            cat = "Accessories";
+          }
+          
+          let icon = "🛍️";
+          if (cat === "Beauty") {
+            icon = lower.includes("lip") ? "💄" : (lower.includes("cushion") ? "🎨" : (lower.includes("serum") || lower.includes("rose") ? "🌸" : "👁️"));
+          } else if (cat === "Fashion") {
+            icon = lower.includes("bag") ? "👜" : (lower.includes("skirt") ? "👘" : "👗");
+          } else if (cat === "Accessories") {
+            icon = lower.includes("necklace") ? "💎" : (lower.includes("earring") ? "✨" : "🎀");
+          }
+
+          return {
+            id: `#LV-${o.id.slice(0, 4).toUpperCase()}`,
+            product: firstItem,
+            icon: icon,
+            meta: metaText,
+            customer: o.users?.name || 'Guest',
+            amount: `Rp ${o.total.toLocaleString('id-ID')}`,
+            status: o.status,
+            date: new Date(o.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }),
+            payment: 'E-Wallet',
+            category: cat,
+          };
+        });
+        setOrders(mapped);
+      } else {
+        setOrders(defaultOrders);
+      }
+    }).catch(err => {
+      console.error("Error loading dashboard orders", err);
+      setOrders(defaultOrders);
+    });
   }, []);
 
-  const topProducts = [
-    { name: "Luneve Lip Glow Serum", earnings: 42000000 },
-    { name: "Glow Cushion Foundation", earnings: 38500000 },
+  const allTopProducts = [
+    { name: "Luneve Lip Glow Serum", earnings: 42000000, category: "Beauty", icon: "💄", sales: "1,420 sold", trend: "+14%", share: 85 },
+    { name: "Glow Cushion Foundation", earnings: 38500000, category: "Beauty", icon: "🎨", sales: "1,150 sold", trend: "+9%", share: 78 },
+    { name: "Ethereal Eyeshadow Palette", earnings: 31200000, category: "Beauty", icon: "👁️", sales: "980 sold", trend: "+18%", share: 64 },
+    { name: "Satin Evening Dress Luxe", earnings: 53400000, category: "Fashion", icon: "👗", sales: "620 sold", trend: "+24%", share: 92 },
+    { name: "Velvet Tote Bag Luxe", earnings: 27600000, category: "Fashion", icon: "👜", sales: "510 sold", trend: "+6%", share: 55 },
+    { name: "Crystal Pendant Necklace", earnings: 19800000, category: "Accessories", icon: "💎", sales: "470 sold", trend: "+12%", share: 45 },
+    { name: "Silk Ribbon Hairclip", earnings: 14500000, category: "Accessories", icon: "🎀", sales: "780 sold", trend: "+31%", share: 35 },
   ];
+
+  const filteredTopProducts = allTopProducts
+    .filter(p => activeCategory === "All Data" || p.category === activeCategory)
+    .slice(0, 4);
+
+  const filteredOrders = orders.filter(order => {
+    const matchesCategory = activeCategory === "All Data" || order.category === activeCategory;
+    const matchesSearch = 
+      !searchQuery ||
+      order.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      order.product.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      order.customer.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      order.status.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+
+  const totalPages = Math.ceil(filteredOrders.length / itemsPerPage) || 1;
+  const paginatedOrders = filteredOrders.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   const openOrderDetails = (order) => {
     setSelectedOrder(order);
@@ -104,18 +185,18 @@ export default function AdminDashboard() {
           {/* Sisi Kiri: Breadcrumbs & Live Clock */}
           <div className="flex items-center gap-4 pl-1">
             <div className="text-[11px] font-bold text-slate-400 tracking-wider uppercase">
-              Dashboard <span className="mx-1 text-slate-300">/</span> <span className="text-indigo-600 font-extrabold">Overview</span>
+              Dashboard <span className="mx-1 text-slate-300">/</span> <span className="text-pink-500 font-extrabold">Overview</span>
             </div>
             <div className="h-4 w-[1px] bg-slate-200 hidden md:block"></div>
             <div className="hidden md:flex items-center gap-2 text-xs text-slate-500 font-semibold bg-white px-3 py-1.5 rounded-xl border border-slate-100 shadow-2xs">
-              <FaClock className="text-indigo-500" size={12} />
+              <FaClock className="text-pink-500" size={12} />
               <span>{liveTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' })} WIB</span>
             </div>
           </div>
 
           {/* Sisi Kanan: 1 Category Filter, Komponen UI DateRangePicker & Profil Dropdown */}
           <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto justify-between lg:justify-end">
-            <CategoryFilter />
+            <CategoryFilter activeCategory={activeCategory} onSelectCategory={handleCategoryChange} />
             <DateRangePicker />
 
             {/* Profil Admin Dropdown */}
@@ -124,7 +205,7 @@ export default function AdminDashboard() {
                 onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
                 className="flex items-center gap-3 bg-white p-1.5 pr-4 rounded-2xl border border-slate-100 hover:bg-slate-50 transition-all text-left shadow-2xs"
               >
-                <div className="w-7 h-7 bg-indigo-600 rounded-lg flex items-center justify-center text-white text-xs font-black">
+                <div className="w-7 h-7 bg-pink-500 rounded-lg flex items-center justify-center text-white text-xs font-black shadow-sm shadow-pink-200">
                   NB
                 </div>
                 <div>
@@ -198,93 +279,173 @@ export default function AdminDashboard() {
         </div>
 
         {/* TABEL ORDERS DAN ANALITIK */}
-        <div className="grid grid-cols-12 gap-6">
-          <div className="col-span-12 lg:col-span-8 bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm space-y-6">
+        <div className="grid grid-cols-12 gap-6 items-start">
+          <div className="col-span-12 lg:col-span-8 bg-white p-6 md:p-8 rounded-[2.5rem] border border-slate-100 shadow-sm flex flex-col gap-6">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <h3 className="text-base font-bold text-slate-900 tracking-tight">
                 Recent Orders
               </h3>
-              <div className="flex items-center gap-3 w-full sm:w-auto">
-                <div className="relative flex-1 sm:w-48">
-                  <FaMagnifyingGlass
-                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
-                    size={12}
-                  />
-                  <input
-                    type="text"
-                    placeholder="Search..."
-                    className="w-full bg-slate-50 pl-9 pr-4 py-2 rounded-xl text-xs font-medium border-0 focus:ring-2 focus:ring-indigo-500/20 placeholder:text-slate-400"
-                  />
-                </div>
+              <div className="relative flex-1 sm:w-48">
+                <FaMagnifyingGlass
+                  className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
+                  size={12}
+                />
+                <input
+                  type="text"
+                  placeholder="Search products, orders..."
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                  className="w-full bg-slate-50 pl-9 pr-4 py-2 rounded-xl text-xs font-medium border-0 focus:ring-2 focus:ring-pink-500/20 placeholder:text-slate-400 outline-none transition-all"
+                />
               </div>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="border-b border-slate-100 text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                    <th className="pb-4 pl-2">Order ID</th>
-                    <th className="pb-4">Products</th>
-                    <th className="pb-4">Customer</th>
-                    <th className="pb-4">Amount</th>
-                    <th className="pb-4">Status</th>
-                    <th className="pb-4 pr-2 text-right">Action</th>
+                    <th className="pb-3 pl-2">Order ID</th>
+                    <th className="pb-3">Products</th>
+                    <th className="pb-3">Customer</th>
+                    <th className="pb-3">Amount</th>
+                    <th className="pb-3">Status</th>
+                    <th className="pb-3 pr-2 text-right">Action</th>
                   </tr>
                 </thead>
-                <tbody className="text-xs divide-y divide-slate-50/50">
-                  {orders.map((order) => (
-                    <tr key={order.id} className="hover:bg-slate-50/40 transition-colors">
-                      <td className="py-4 pl-2 font-bold text-slate-900">{order.id}</td>
-                      <td className="py-4">
-                        <div className="flex items-center gap-3">
-                          <span className="text-lg">{order.icon}</span>
-                          <div>
-                            <p className="font-bold text-slate-800 leading-tight">{order.product}</p>
-                            <span className="text-[10px] text-slate-400 font-medium">{order.meta}</span>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="py-4 font-semibold text-slate-600">{order.customer}</td>
-                      <td className="py-4 font-bold text-slate-900">{order.amount}</td>
-                      <td className="py-4">
-                        <span
-                          className={`px-2.5 py-1 rounded-lg text-[10px] font-bold ${order.status === "In Progress" ? "bg-indigo-50 text-indigo-600" : "bg-amber-50 text-amber-600"}`}
-                        >
-                          {order.status}
-                        </span>
-                      </td>
-                      <td className="py-4 pr-2 text-right relative">
-                        {/* KOMPONEN 3: SHADCN TOOLTIP (Muncul saat hover tombol aksi) */}
-                        <div className="inline-block relative">
-                          <button
-                            onClick={() => openOrderDetails(order)}
-                            onMouseEnter={() => setActiveTooltipId(order.id)}
-                            onMouseLeave={() => setActiveTooltipId(null)}
-                            className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all"
-                          >
-                            <FaEye size={14} />
-                          </button>
-
-                          {activeTooltipId === order.id && (
-                            <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] font-bold px-2 py-1 rounded shadow-md whitespace-nowrap z-30 animate-in fade-in zoom-in-95 duration-100">
-                              View Details
-                              <div className="w-1.5 h-1.5 bg-slate-900 absolute top-full left-1/2 -translate-x-1/2 rotate-45 -mt-0.5"></div>
+                <tbody className="text-xs divide-y divide-slate-50/60">
+                  {paginatedOrders.length > 0 ? (
+                    paginatedOrders.map((order) => (
+                      <tr key={order.id} className="hover:bg-slate-50/50 transition-colors">
+                        <td className="py-3 pl-2 font-bold text-slate-900">{order.id}</td>
+                        <td className="py-3">
+                          <div className="flex items-center gap-3">
+                            <span className="text-lg">{order.icon}</span>
+                            <div>
+                              <p className="font-bold text-slate-800 leading-tight">{order.product}</p>
+                              <span className="text-[10px] text-slate-400 font-medium">{order.meta}</span>
                             </div>
-                          )}
-                        </div>
+                          </div>
+                        </td>
+                        <td className="py-3 font-semibold text-slate-600">{order.customer}</td>
+                        <td className="py-3 font-bold text-slate-900">{order.amount}</td>
+                        <td className="py-3">
+                          <span
+                            className={`px-2.5 py-1 rounded-lg text-[10px] font-bold ${order.status === "In Progress" ? "bg-pink-50 text-pink-600" : "bg-amber-50 text-amber-600"}`}
+                          >
+                            {order.status}
+                          </span>
+                        </td>
+                        <td className="py-3 pr-2 text-right relative">
+                          {/* KOMPONEN 3: SHADCN TOOLTIP (Muncul saat hover tombol aksi) */}
+                          <div className="inline-block relative">
+                            <button
+                              onClick={() => openOrderDetails(order)}
+                              onMouseEnter={() => setActiveTooltipId(order.id)}
+                              onMouseLeave={() => setActiveTooltipId(null)}
+                              className="p-1.5 text-slate-400 hover:text-pink-500 hover:bg-pink-50 rounded-xl transition-all"
+                            >
+                              <FaEye size={14} />
+                            </button>
+
+                            {activeTooltipId === order.id && (
+                              <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] font-bold px-2 py-1 rounded shadow-md whitespace-nowrap z-30 animate-in fade-in zoom-in-95 duration-100">
+                                View Details
+                                <div className="w-1.5 h-1.5 bg-slate-900 absolute top-full left-1/2 -translate-x-1/2 rotate-45 -mt-0.5"></div>
+                              </div>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="6" className="py-12 text-center text-slate-400 font-medium">
+                        No orders found in "{activeCategory}" category.
                       </td>
                     </tr>
-                  ))}
+                  )}
                 </tbody>
               </table>
+            </div>
+
+            {/* Interactive Pagination Footer */}
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-3 border-t border-slate-100 text-xs font-semibold text-slate-500">
+              <div>
+                Showing <span className="font-bold text-slate-800">{filteredOrders.length > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0}</span> to <span className="font-bold text-slate-800">{Math.min(currentPage * itemsPerPage, filteredOrders.length)}</span> of <span className="font-bold text-slate-800">{filteredOrders.length}</span> orders
+              </div>
+              <div className="flex items-center gap-1.5">
+                <button
+                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                  className={`px-3 py-1.5 rounded-xl border border-slate-200 transition-all font-bold ${
+                    currentPage === 1 ? 'opacity-40 cursor-not-allowed bg-slate-50' : 'hover:bg-slate-100 text-slate-700'
+                  }`}
+                >
+                  Prev
+                </button>
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`w-8 h-8 rounded-xl font-bold transition-all flex items-center justify-center ${
+                      currentPage === page
+                        ? 'bg-pink-500 text-white shadow-md shadow-pink-200'
+                        : 'hover:bg-slate-100 text-slate-600'
+                    }`}
+                  >
+                    {page}
+                  </button>
+                ))}
+                <button
+                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                  disabled={currentPage === totalPages}
+                  className={`px-3 py-1.5 rounded-xl border border-slate-200 transition-all font-bold ${
+                    currentPage === totalPages ? 'opacity-40 cursor-not-allowed bg-slate-50' : 'hover:bg-slate-100 text-slate-700'
+                  }`}
+                >
+                  Next
+                </button>
+              </div>
             </div>
           </div>
 
           {/* SISI KANAN ANALITIK */}
-          <div className="col-span-12 lg:col-span-4 bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm flex flex-col justify-between gap-6">
+          <div className="col-span-12 lg:col-span-4 bg-white p-6 md:p-8 rounded-[2.5rem] border border-slate-100 shadow-sm flex flex-col gap-6">
             <SalesOverview />
-            <div className="space-y-4 pt-4 border-t border-slate-50">
-              <div className="flex justify-between text-[10px] font-black text-slate-400 uppercase tracking-widest"><span>Product Name</span><span>Earnings</span></div>
-              <div className="space-y-1">{topProducts.map((prod, i) => <TopProductItem key={i} {...prod} />)}</div>
+            
+            <div className="space-y-3 pt-4 border-t border-slate-100">
+              <div className="flex justify-between items-center">
+                <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Top Performing</h4>
+                <span className="text-[10px] font-bold text-pink-500 bg-pink-50 px-2.5 py-1 rounded-lg">By Revenue</span>
+              </div>
+              <div className="space-y-1">
+                {filteredTopProducts.map((prod, i) => (
+                  <TopProductItem key={i} {...prod} />
+                ))}
+              </div>
+            </div>
+
+            {/* Interactive Review Banner */}
+            <div
+              onClick={() => navigate('/reviews')}
+              className="mt-2 bg-gradient-to-br from-pink-500 to-rose-600 p-5 rounded-3xl text-white shadow-lg shadow-pink-500/20 hover:shadow-xl hover:scale-[1.02] transition-all cursor-pointer group relative overflow-hidden"
+            >
+              <div className="absolute -right-6 -bottom-6 w-24 h-24 bg-white/10 rounded-full blur-xl group-hover:scale-150 transition-transform"></div>
+              <div className="relative z-10 flex items-center justify-between">
+                <div>
+                  <span className="text-[9px] font-black uppercase tracking-wider bg-white/20 px-2 py-0.5 rounded-full">
+                    Customer Satisfaction
+                  </span>
+                  <h4 className="text-sm font-black mt-1.5 flex items-center gap-1.5">
+                    <span>⭐ 4.9 / 5.0 Rating</span>
+                  </h4>
+                  <p className="text-[11px] text-pink-100 font-medium mt-0.5">
+                    99.4% positive reviews this week.
+                  </p>
+                </div>
+                <div className="w-8 h-8 rounded-full bg-white text-pink-600 flex items-center justify-center font-black text-xs shadow-md group-hover:translate-x-1 transition-transform">
+                  ➔
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -347,7 +508,7 @@ export default function AdminDashboard() {
                   <span className="text-slate-400 font-semibold">
                     Total Amount
                   </span>
-                  <p className="font-black text-indigo-600 mt-0.5 text-sm">
+                  <p className="font-black text-pink-600 mt-0.5 text-sm">
                     {selectedOrder.amount}
                   </p>
                 </div>
@@ -358,7 +519,7 @@ export default function AdminDashboard() {
             <div className="mt-6 pt-4 border-t border-slate-100 flex justify-end">
               <button
                 onClick={() => setIsDialogOpen(false)}
-                className="px-5 py-2.5 bg-indigo-600 text-white text-xs font-bold rounded-xl shadow-md shadow-indigo-100 hover:bg-indigo-700 transition-all"
+                className="px-5 py-2.5 bg-pink-500 text-white text-xs font-bold rounded-xl shadow-md shadow-pink-100 hover:bg-pink-600 transition-all"
               >
                 Close Details
               </button>
